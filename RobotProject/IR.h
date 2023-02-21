@@ -1,62 +1,44 @@
 #include <avr/io.h>
-#include <stdbool.h>
+#include "adc.h"
 
-
-#define sensor_l PINB0
-#define sensor_c PIND7
-#define sensor_r PINB3
+#define sensor_l PINC5
+#define sensor_c PINC4
+#define sensor_r PINC3
 
 #define WEIRD_MEASUREMENT -100
-
-#define MIDDLEISH 0.3
-#define OUTWARD 0.75
-#define BORDER 1
 
 #define FLIP_DIRECTION 1
 
 
 void initIRSensors() {
-	DDRD |= (1<<sensor_c);
-	DDRB |= (1<<sensor_l) | (1<<sensor_r);
-	
-	PORTD &= ~(1<<sensor_c);
-	PORTB &= ~(1<<sensor_l) & ~(1<<sensor_r);
+	adc_init();
 }
 
 // return a negative value when we are on the left side of the track,
 // a positive value when we are on the right side of the track
 // the higher the absolute value, the more outward we are
-// if -100 is returned, the measurement was weird.
 
 float getTrackDirection() {
-	bool left_black   = (PINB == (1<<sensor_l));
-	bool right_black  = (PINB == (1<<sensor_r));
-	bool center_black = (PINB == (1<<sensor_c));
+	// the higher the blacker
+	uint16_t left_black   = get_adc(sensor_l);
+	uint16_t right_black  = get_adc(sensor_r);
+	uint16_t center_black = get_adc(sensor_c);
+
+	if(left_black > 950 || left_black < 10)
+		return -1;
+	if(right_black > 950 || right_black < 10)
+		return 1;
+
+	// positive if left is the blackest
+	uint16_t gradient = (left_black - center_black) + (center_black - right_black);
+	// divide by the approx. max./2 to get val. between 0 and 2, minus one to get range from -1 to 1;
+	gradient = gradient / 250 - 1;
+	// clip the value
+	if(gradient > 1) {
+		gradient = 1;
+	} else if(gradient < -1) {
+		gradient = -1;
+	}
 	
-	// Middleish left
-	if(!left_black && center_black && right_black ) {
-		return -MIDDLEISH * FLIP_DIRECTION;
-	} 
-	// Middleish right
-	else if(!left_black && !center_black && right_black) {
-		return MIDDLEISH * FLIP_DIRECTION;
-	}
-	// right
-	else if(left_black && center_black && right_black) {
-		return OUTWARD * FLIP_DIRECTION;
-	}
-	// left
-	else if(!left_black && !center_black && !right_black) {
-		return -OUTWARD * FLIP_DIRECTION;
-	}
-	// right border
-	else if(left_black && center_black && !right_black) {
-		return BORDER * FLIP_DIRECTION;
-	}
-	// left border
-	else if(left_black && !center_black && !right_black ) {
-		return -BORDER * FLIP_DIRECTION;
-	} else {
-		return WEIRD_MEASUREMENT;
-	}
+	return gradient;
 }
