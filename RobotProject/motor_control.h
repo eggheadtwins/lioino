@@ -43,7 +43,7 @@ void set_speed(int left_motor_speed, int right_motor_speed){
 
 
 
-void pwm_timer_init(){
+void pwm_timer_init(void){
 	//Just to make sure the pins are set as OUTPUT.
 	MOTORS_DDR |= (1<<LEFT_MOTOR_PIN) | (1<<RIGHT_MOTOR_PIN);
 	
@@ -55,11 +55,6 @@ void pwm_timer_init(){
 	
 	//Enable Overflow interrupt.
 	TIMSK0 = (1<<TOIE0);	
-}
-
-
-void abs(int value){
-	return if(value < 0)? value * (-1) : value;
 }
 
 
