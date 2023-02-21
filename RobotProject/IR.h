@@ -6,13 +6,13 @@
 #define sensor_c PIND7
 #define sensor_r PINB3
 
-#define WEIRD_MEASUREMENT = -100;
+#define WEIRD_MEASUREMENT -100
 
-#define MIDDLEISH = 0.3;
-#define OUTWARD = 0.75;
-#define BORDER = 1;
+#define MIDDLEISH 0.3
+#define OUTWARD 0.75
+#define BORDER 1
 
-#define FLIP_DIRECTION = 1;
+#define FLIP_DIRECTION 1
 
 
 void initIRSensors() {
