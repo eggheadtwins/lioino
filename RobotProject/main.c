@@ -2,9 +2,11 @@
 #include "IR.h"
 #include "motor_control.h"
 #include "usart.h"
+#include <stdlib.h>
 #include <util/delay.h>
 
 void test(void);
+unsigned char * tofrray(uint8_t number);
 
 int main(void)
 {
@@ -12,13 +14,30 @@ int main(void)
 	pwm_timer_init();	
 	set_speed(30, 30);
 	_delay_ms(20);
+	usart_init();
 
-    while (0) 
+    while (1) 
     {
-		usart_send_chars(getTrackDirection());
+
+		test();
+		
+		
     }
 }
 
+
+
+unsigned char * tofrray(uint8_t number)
+{
+	int n = log10(number) + 1;
+	int i;
+	char *numberArray = calloc(n, sizeof(char));
+	for (i = n-1; i >= 0; --i, number /= 10)
+	{
+		numberArray[i] = (number % 10) + '0';
+	}
+	return numberArray;
+}
 
 
 void test(void){
