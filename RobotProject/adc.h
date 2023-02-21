@@ -42,12 +42,17 @@ void conversion_init(void){
 	ADCSRA |= (1<<ADSC); // Enable Start conversion bit.
 }
 
+
+int is_converting(void){
+	return (ADCSRA & (1<<ADSC));
+}
+
+
 unsigned int get_adc(uint8_t pin){
-	//DIDR0 = (1<<pin); //Disable digital input buffer for the pin.
 	change_channel(pin); // Change channel
 	conversion_init();
 	
-	while((ADCSRA & (1<<ADSC)));
+	while(is_converting());
 	return ADC; // 10-bit.
 
 }
