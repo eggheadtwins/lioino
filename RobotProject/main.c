@@ -8,26 +8,13 @@ void test(void);
 
 int main(void)
 {
-	
 	initIRSensors();
 	pwm_timer_init();	
-	//set_speed(30, 30);
-	/*
-	
-	
-		NOT BELOW 70 WHEN OTHER TURN OFF
-		UNDER 35 FUCK WHEN OTHER IS TURNED ON
-	*/
-    /* Replace with your application code */
-	
-	
-		
-	
+	set_speed(30, 30);
+	_delay_ms(20);
+
     while (0) 
     {
-		
-		
-		
 		usart_send_chars(getTrackDirection());
     }
 }
@@ -36,51 +23,11 @@ int main(void)
 
 void test(void){
 	float track_dir = getTrackDirection();
-		
-		
-	if(track_dir == MIDDLEISH){
-		set_speed(30,35);
-	}
-		
-		
-	if(track_dir == -MIDDLEISH){
-		set_speed(35, 30);
-			
-	}
-		
-		
-		if(track_dir == OUTWARD){
-			set_speed(18,35);
-			
-			
-		}
-		
-		
-		if(track_dir == -OUTWARD){
-			set_speed(35,18);
-			
-			
-		}
-		
-		
-		
-		if(track_dir == BORDER){
-			set_speed(0, 100);
-			
-			
-		}
-		
-		
-		if(track_dir == -BORDER){
-			set_speed(100, 0);
-			
-		}
-		
-		if(track_dir == WEIRD_MEASUREMENT){
-			set_speed(0, 0);
-		}
-		
-		_delay_ms(3);	
-	
-	
+
+	// 1 -> 100, 0
+	//-1 -> 0, 100
+	// 0 -> 50, 50
+	set_speed((track_dir+1) * 50, (track_dir-1) * -50);
+
+	_delay_ms(3);
 }
