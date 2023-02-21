@@ -2,9 +2,9 @@
 #include <stdbool.h>
 
 
-#define sensor_l PINB0
-#define sensor_c PIND7
-#define sensor_r PINB3
+#define sensor_l PINC5
+#define sensor_c PINC4
+#define sensor_r PINC3
 
 #define WEIRD_MEASUREMENT -100
 
@@ -16,11 +16,7 @@
 
 
 void initIRSensors() {
-	DDRD |= (1<<sensor_c);
-	DDRB |= (1<<sensor_l) | (1<<sensor_r);
-	
-	PORTD &= ~(1<<sensor_c);
-	PORTB &= ~(1<<sensor_l) & ~(1<<sensor_r);
+	adc_init([sensor_c, sensor_l, sensor_r]);
 }
 
 // return a negative value when we are on the left side of the track,
@@ -29,6 +25,7 @@ void initIRSensors() {
 // if -100 is returned, the measurement was weird.
 
 float getTrackDirection() {
+	conversion_init();
 	bool left_black   = (PINB == (1<<sensor_l));
 	bool right_black  = (PINB == (1<<sensor_r));
 	bool center_black = (PINB == (1<<sensor_c));
