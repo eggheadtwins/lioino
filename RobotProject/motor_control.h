@@ -12,9 +12,8 @@
 #define MOTOR_PWM_TIMER_TOP 255
 #define MOTORS_DDR DDRD
 
-#define MOTOR_MINIMUM_SPEED 30
+#define MOTOR_MINIMUM_SPEED 0
 #define MOTOR_MAXIMUM_SPEED 100
-#define MINIMUM_MOTOR_DIFFERENCE 10
 
 #ifdef LEFT_MOTOR_PIN
 #define LEFT_MOTOR_OCnx OCR0B
@@ -26,11 +25,9 @@
 #endif
 
 
-void set_speed(int left_motor_speed, int right_motor_speed){	
-	
+void set_speed(int left_motor_speed, int right_motor_speed){			
 	if (left_motor_speed >= MOTOR_MINIMUM_SPEED && left_motor_speed <= MOTOR_MAXIMUM_SPEED && 
-		right_motor_speed >= MOTOR_MINIMUM_SPEED && right_motor_speed <= MOTOR_MAXIMUM_SPEED &&
-		abs(left_motor_speed - right_motor_speed) >= MINIMUM_MOTOR_DIFFERENCE){
+		right_motor_speed >= MOTOR_MINIMUM_SPEED && right_motor_speed <= MOTOR_MAXIMUM_SPEED){
 		
 		//Set OCnx values
 		LEFT_MOTOR_OCnx = (left_motor_speed * MOTOR_PWM_TIMER_TOP) / 100;
