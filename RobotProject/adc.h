@@ -1,55 +1,94 @@
 #include <avr/io.h>
-#include <avr/interrupt.h>
+#include <avr/sfr_defs.h>
 
 #ifndef F_CPU
 #define F_CPU 16000000UL
 #endif
 
+#define PRESCALER 4
+#define AREF REFS0
+
+
+void set_prescaler(void){
+	switch(PRESCALER){ // Set prescaler.
+		case 2:
+			ADCSRA |= _BV(ADPS0);
+			break;
+		case 4:
+			ADCSRA |= _BV(ADPS1);
+			break;
+		case 8:
+			ADCSRA |= _BV(ADPS1) | _BV(ADPS0);
+			break;
+		case 16:
+			ADCSRA |= _BV(ADPS2);
+			break;
+		case 32:
+			ADCSRA |= _BV(ADPS2) | (ADPS0);
+			break;
+		case 64:
+			ADCSRA |= _BV(ADPS2) | _BV(ADPS1);
+			break;
+		case 128:
+			ADCSRA |= _BV(ADPS2) | _BV(ADPS1) | _BV(ADPS0);
+			break;
+		default:
+			break;
+	}	
+	
+}
 
 void adc_init(){
-	sei(); // Enable global interrupts.
-	ADMUX |= (1<<REFS0); // VREF to AVCC (+5v).
-	ADCSRA |= (1<<ADEN) | (1<<ADPS2) | (1<<ADPS0); // Enable ADC and 32 Prescaler.
+	ADCSRA = _BV(ADEN); // Enable ADC
+	
+	set_prescaler();
 }
 
 
-void change_channel(uint8_t pin){
+
+void pin_to_mux(uint8_t pin){
+	ADMUX = _BV(AREF) ; // VREF to AVCC (+5v).
+	
 	switch(pin){ // Sets MUX values based on pins.
 		case ADC0D:
 			break;
 		case ADC1D:
-			ADMUX = (1<<MUX0);
+			ADMUX |= _BV(MUX0);
 			break;
 		case ADC2D:
-			ADMUX = (1<<MUX1);
+			ADMUX |= _BV(MUX1);
 			break;
 		case ADC3D:
-			ADMUX = (1<<MUX1) |(1<<MUX0);
+			ADMUX |= _BV(MUX1)| _BV(MUX0);
 			break;
 		case ADC4D:
-			ADMUX = (1<<MUX2);
+			ADMUX |= _BV(MUX2);
 			break;
 		case ADC5D:
-			ADMUX = (1<<MUX2) | (1<<MUX0);
+			ADMUX |= _BV(MUX2) | _BV(MUX0); 
 			break;
 		default:
 			break;
 	}
+	
+	
+	// Disable digital input buffer. Not necessary as it an analog signal. Just to save power.
+	DIDR0 = _BV(pin);
 }
 
 
 void conversion_init(void){
-	ADCSRA |= (1<<ADSC); // Enable Start conversion bit.
+	ADCSRA |= _BV(ADSC); // Enable Start conversion bit.
 }
 
 
-int is_converting(void){
-	return (ADCSRA & (1<<ADSC));
+uint8_t is_converting(void){
+	return (ADCSRA & _BV(ADSC));
 }
 
 
-unsigned int get_adc(uint8_t pin){
-	change_channel(pin); // Change channel
+uint16_t adc_read(uint8_t pin){
+	pin_to_mux(pin); // Change channel
 	conversion_init();
 	
 	while(is_converting());
