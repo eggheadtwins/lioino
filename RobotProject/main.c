@@ -15,7 +15,7 @@ int main(void) {
 	set_speed(100, 100);
 	_delay_ms(20);
 
-    while (0) {
+    while (1) {
 		test();
     }
 }
