@@ -23,7 +23,6 @@
 #define RIGHT_MOTOR_OCnx OCR0A
 #endif
 
-
 #define PRESCALER 8
 
 void start_timer(void) {
@@ -57,7 +56,7 @@ void set_speed(int left_motor_speed, int right_motor_speed) {
 		LEFT_MOTOR_OCnx = (left_motor_speed * MOTOR_PWM_TIMER_TOP) / 100;
 		RIGHT_MOTOR_OCnx = (right_motor_speed * MOTOR_PWM_TIMER_TOP) / 100;
 	
-		//Start Timer by setting no Prescaler.
+		//Start Timer by setting Prescaler.
 		start_timer();	
 	}
 }
@@ -70,7 +69,7 @@ void pwm_timer_init(void) {
 	sei();
 	
 	//Enable PWM for PIND5 and PIND6. Set timer to FAST PWM mode.
-	TCCR0A |= _BV(COM0A1) | (COM0B1) | (WGM00) | (WGM01);
+	TCCR0A |= _BV(COM0A1) | _BV(COM0B1) | _BV(WGM00) | _BV(WGM01);
 	
 	//Enable Overflow interrupt.
 	TIMSK0 = _BV(TOIE0);	
