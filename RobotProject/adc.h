@@ -48,7 +48,7 @@ void adc_init() {
 
 
 void pin_to_mux(uint8_t pin) {
-	ADMUX = _BV(AREF) ; // VREF to AVCC (+5v).
+	ADMUX = _BV(AREF) | _BV(ADLAR) ; // VREF to AVCC (+5v) and Left adjust bits. 
 	
 	switch(pin){ // Sets MUX values based on pins.
 		case ADC0D:
@@ -87,13 +87,13 @@ uint8_t is_converting(void) {
 }
 
 
-uint16_t adc_read(uint8_t pin) {
+uint8_t adc_read(uint8_t pin) {
 	pin_to_mux(pin); // Change channel
 	conversion_init();
 	
 	while(is_converting());
 	
-	return (ADC_SIZE == 10)? ADC : ADCH;
+	return ADCH;
 
 }
 
