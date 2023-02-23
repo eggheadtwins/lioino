@@ -8,7 +8,7 @@
 #define PRESCALER 4
 #define AREF REFS0
 
-#define ADC_SIZE
+#define ADC_SIZE 10
 
 
 void set_prescaler(void) {
