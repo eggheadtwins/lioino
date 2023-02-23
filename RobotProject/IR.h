@@ -6,7 +6,10 @@
 #define sensor_c PINC4
 #define sensor_r PINC3
 
+#define IR_threshold 15
+
 #define FLIP_DIRECTION 1
+
 
 
 void initIRSensors() {
@@ -18,20 +21,20 @@ void initIRSensors() {
 // the higher the absolute value, the more outward we are
 
 float getTrackDirection() {
-	// the higher the blacker, 10bit value
-	uint16_t left_black   = adc_read(sensor_l);
-	uint16_t right_black  = adc_read(sensor_r);
-	uint16_t center_black = adc_read(sensor_c);
+	// the higher the blacker, 8bit value
+	uint8_t left_black   = adc_read(sensor_l);
+	uint8_t right_black  = adc_read(sensor_r);
+	uint8_t center_black = adc_read(sensor_c);
 
-	if(left_black > 950 || left_black < 10)
+	if(left_black > 255 - IR_threshold || left_black < IR_threshold)
 		return -1;
-	if(right_black > 950 || right_black < 10)
+	if(right_black > 255- IR_threshold || right_black < IR_threshold)
 		return 1;
 
 	// positive if left is the blackest
 	uint16_t gradient = (left_black - center_black) + (center_black - right_black);
-	// divide by the approx. max./2 to get val. between 0 and 2, minus one to get range from -1 to 1;
-	gradient = gradient / 250 - 1;
+	// divide by the approx. max. to normalize and get range ~[-1 : 1]
+	//gradient = gradient / 180; // edit this to calibrate sensors
 	// clip the value
 	if(gradient > 1) {
 		gradient = 1;
