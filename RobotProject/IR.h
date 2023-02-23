@@ -6,7 +6,7 @@
 #define sensor_c PINC4
 #define sensor_r PINC3
 
-#define IR_threshold 15
+#define IR_threshold 10
 
 #define FLIP_DIRECTION 1
 
