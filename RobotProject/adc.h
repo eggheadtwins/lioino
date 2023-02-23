@@ -11,7 +11,7 @@
 #define ADC_SIZE
 
 
-void set_prescaler(void){
+void set_prescaler(void) {
 	switch(PRESCALER){ // Set prescaler.
 		case 2:
 			ADCSRA |= _BV(ADPS0);
@@ -40,15 +40,14 @@ void set_prescaler(void){
 	
 }
 
-void adc_init(){
+void adc_init() {
 	ADCSRA = _BV(ADEN); // Enable ADC
-	
 	set_prescaler();
 }
 
 
 
-void pin_to_mux(uint8_t pin){
+void pin_to_mux(uint8_t pin) {
 	ADMUX = _BV(AREF) ; // VREF to AVCC (+5v).
 	
 	switch(pin){ // Sets MUX values based on pins.
@@ -73,23 +72,22 @@ void pin_to_mux(uint8_t pin){
 			break;
 	}
 	
-	
 	// Disable digital input buffer. Not necessary as it an analog signal. Just to save power.
 	DIDR0 = _BV(pin);
 }
 
 
-void conversion_init(void){
+void conversion_init(void) {
 	ADCSRA |= _BV(ADSC); // Enable Start conversion bit.
 }
 
 
-uint8_t is_converting(void){
+uint8_t is_converting(void) {
 	return (ADCSRA & _BV(ADSC));
 }
 
 
-uint16_t adc_read(uint8_t pin){
+uint16_t adc_read(uint8_t pin) {
 	pin_to_mux(pin); // Change channel
 	conversion_init();
 	

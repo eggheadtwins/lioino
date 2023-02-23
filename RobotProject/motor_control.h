@@ -1,5 +1,3 @@
-
-
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <avr/sfr_defs.h>
@@ -28,7 +26,7 @@
 
 #define PRESCALER 8
 
-void start_timer(void){
+void start_timer(void) {
 	switch(PRESCALER){ // Sets MUX values based on pins.
 		case 0:
 			TCCR0B |= _BV(CS00);
@@ -48,12 +46,10 @@ void start_timer(void){
 		default:
 			break;
 	}
-	
-	
 }
 
 
-void set_speed(int left_motor_speed, int right_motor_speed){			
+void set_speed(int left_motor_speed, int right_motor_speed) {			
 	if (left_motor_speed >= MOTOR_MINIMUM_SPEED && left_motor_speed <= MOTOR_MAXIMUM_SPEED && 
 		right_motor_speed >= MOTOR_MINIMUM_SPEED && right_motor_speed <= MOTOR_MAXIMUM_SPEED){
 		
@@ -66,10 +62,7 @@ void set_speed(int left_motor_speed, int right_motor_speed){
 	}
 }
 
-
-
-
-void pwm_timer_init(void){
+void pwm_timer_init(void) {
 	//Just to make sure the pins are set as OUTPUT.
 	MOTORS_DDRx |= _BV(LEFT_MOTOR_PIN) | (RIGHT_MOTOR_PIN);
 	
@@ -83,9 +76,6 @@ void pwm_timer_init(void){
 	TIMSK0 = _BV(TOIE0);	
 }
 
-
-ISR(TIMER0_OVF_vect){
+ISR(TIMER0_OVF_vect) {
 	//DO NOTHING
-	
-	
 }

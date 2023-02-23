@@ -1,11 +1,10 @@
 #include <avr/io.h>
+#include <avr/sfr_defs.h>
 #include "adc.h"
 
 #define sensor_l PINC5
 #define sensor_c PINC4
 #define sensor_r PINC3
-
-#define WEIRD_MEASUREMENT -100
 
 #define FLIP_DIRECTION 1
 
@@ -19,10 +18,10 @@ void initIRSensors() {
 // the higher the absolute value, the more outward we are
 
 float getTrackDirection() {
-	// the higher the blacker
-	uint16_t left_black   = get_adc(sensor_l);
-	uint16_t right_black  = get_adc(sensor_r);
-	uint16_t center_black = get_adc(sensor_c);
+	// the higher the blacker, 10bit value
+	uint16_t left_black   = adc_read(sensor_l);
+	uint16_t right_black  = adc_read(sensor_r);
+	uint16_t center_black = adc_read(sensor_c);
 
 	if(left_black > 950 || left_black < 10)
 		return -1;
@@ -40,5 +39,5 @@ float getTrackDirection() {
 		gradient = -1;
 	}
 	
-	return gradient;
+	return gradient * FLIP_DIRECTION;
 }
