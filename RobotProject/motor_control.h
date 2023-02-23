@@ -63,7 +63,7 @@ void set_speed(int left_motor_speed, int right_motor_speed) {
 
 void pwm_timer_init(void) {
 	//Just to make sure the pins are set as OUTPUT.
-	MOTORS_DDRx |= _BV(LEFT_MOTOR_PIN) | (RIGHT_MOTOR_PIN);
+	MOTORS_DDRx |= _BV(LEFT_MOTOR_PIN) | _BV(RIGHT_MOTOR_PIN);
 	
 	//Enable global interrupts
 	sei();
