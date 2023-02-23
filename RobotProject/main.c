@@ -8,13 +8,14 @@
 void test(void);
 
 int main(void) {
-	initIRSensors();
+	//initIRSensors();
 	pwm_timer_init();	
-	set_speed(30, 30);
-	_delay_ms(20);
-	usart_init();
+	//usart_init();
 
-    while (1) {
+	set_speed(100, 100);
+	_delay_ms(20);
+
+    while (0) {
 		test();
     }
 }

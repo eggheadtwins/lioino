@@ -41,14 +41,16 @@ void set_prescaler(void) {
 }
 
 void adc_init() {
-	ADCSRA = _BV(ADEN); // Enable ADC
+	ADCSRA |= _BV(ADEN); // Enable ADC
 	set_prescaler();
 }
 
 
 
 void pin_to_mux(uint8_t pin) {
-	ADMUX = _BV(AREF) | _BV(ADLAR) ; // VREF to AVCC (+5v) and Left adjust bits. 
+	ADCSRA = _BV(ADEN); // Enable ADC
+	set_prescaler();
+	ADMUX |= _BV(AREF) | _BV(ADLAR) ; // VREF to AVCC (+5v) and Left adjust bits. 
 	
 	switch(pin){ // Sets MUX values based on pins.
 		case ADC0D:
