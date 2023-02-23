@@ -8,6 +8,8 @@
 #define PRESCALER 4
 #define AREF REFS0
 
+#define ADC_SIZE
+
 
 void set_prescaler(void){
 	switch(PRESCALER){ // Set prescaler.
@@ -92,7 +94,8 @@ uint16_t adc_read(uint8_t pin){
 	conversion_init();
 	
 	while(is_converting());
-	return ADC; // 10-bit.
+	
+	return (ADC_SIZE == 10)? ADC : ADCH;
 
 }
 
