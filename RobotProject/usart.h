@@ -19,29 +19,56 @@ void usart_init(void){
 }
 
 
+uint8_t is_recieve_complete(void){
+	return !(UCSR0A & _BV(RXC0));
+	
+}
+
+uint8_t is_buffer_empty(void){
+	return !(UCSR0A & _BV(UDRE0));
+}
+
+
 void usart_send_char(uint8_t data){
-	while (!(UCSR0A & _BV(UDRE0)));
+	while (is_buffer_empty());
 	UDR0 = data;
 }
 
 
-void usart_send_chars(uint8_t * s){
-	while (*s){
-		usart_send_char(*s++);
+void usart_send_8bit(uint8_t data){
+	uint8_t string[4]; // Max 255, 4 Chars with '/0'.
+	int i = 0;
+	
+	itoa(data, string, 10); // Convert Int to String.
+	
+	while (string[i] != '\0'){
+		usart_send_char(string[i++]);
 	}
+	
+	usart_send_char('\n');
+	free(string);
 
+}
+
+
+void usart_send_16bit(uint16_t data){
+	uint8_t string[7]; 
+	int i = 0;
+	
+	itoa(data, string, 10); 
+	
+	while (string[i] != '\0'){
+		usart_send_char(string[i++]);
+	}
+	
+	usart_send_char('\n');
+	free(string);	
+	
+	
 }
 
 
 uint8_t usart_recieve(){
-	while((UCSR0A & _BV(7)) != 0);
+	while(is_recieve_complete());
 	return UDR0;
-}
-
-
-void uart_puti16B (uint16_t value){
-	char _buffer[17];
-	itoa( value, _buffer, 2 );
-	usart_send_char(_buffer);
-	free(_buffer);
 }
