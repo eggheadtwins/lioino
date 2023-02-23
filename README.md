@@ -8,3 +8,5 @@
 ![ports](/Images/ports.jpg)
 ![pinout](/Images/pinout.png)
 
+# Information
+#### [Datasheet](/Datesheet.pdf)
