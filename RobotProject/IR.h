@@ -22,19 +22,19 @@ void initIRSensors() {
 
 uint8_t getTrackDirection() {
 	// the higher the blacker, 8bit value
-	uint8_t left_black   = adc_read(sensor_l);
+	uint16_t left_black   = read_adc(sensor_l);
 	conversion_init();
-	uint8_t right_black  = adc_read(sensor_r);
+	uint16_t right_black  = read_adc(sensor_r);
 	conversion_init();
-	uint8_t center_black = adc_read(sensor_c);
+	uint16_t center_black = read_adc(sensor_c);
 	conversion_init();
 	
 	
-	usart_send_8bit(left_black);
+	usart_send_16bit(left_black);
 	usart_send_char('\n');
-	usart_send_8bit(right_black);
+	usart_send_16bit(right_black);
 	usart_send_char('\n');
-	usart_send_8bit(center_black);
+	usart_send_16bit(center_black);
 	usart_send_char('\n');
 	
 	

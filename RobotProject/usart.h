@@ -19,18 +19,8 @@ void usart_init(void){
 }
 
 
-uint8_t is_recieve_complete(void){
-	return (UCSR0A & _BV(RXC0));
-	
-}
-
-uint8_t is_buffer_empty(void){
-	return (UCSR0A & _BV(UDRE0));
-}
-
-
 void usart_send_char(uint8_t data){
-	while (!is_buffer_empty());
+	while (!(UCSR0A & _BV(UDRE0)));
 	UDR0 = data;
 }
 
@@ -45,23 +35,21 @@ void usart_send_8bit(uint8_t data){
 		usart_send_char(string[i++]);
 	}
 	
-	usart_send_char('\n');
 	free(string);
 
 }
 
 
 void usart_send_16bit(uint16_t data){
-	uint8_t string[7]; 
+	uint8_t string[10]; // Max 255, 4 Chars with '/0'.
 	int i = 0;
 	
-	itoa(data, string, 10); 
+	itoa(data, string, 10); // Convert Int to String.
 	
 	while (string[i] != '\0'){
 		usart_send_char(string[i++]);
 	}
 	
-	usart_send_char('\n');
 	free(string);	
 	
 	
@@ -69,6 +57,6 @@ void usart_send_16bit(uint16_t data){
 
 
 uint8_t usart_recieve(){
-	while(!is_recieve_complete());
+	while(!(UCSR0A & _BV(RXC0)));
 	return UDR0;
 }

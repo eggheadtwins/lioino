@@ -8,16 +8,14 @@
 void test(void);
 
 int main(void) {
-	initIRSensors();
-	pwm_timer_init();	
+	
 	usart_init();
-
-	//set_speed(100, 100);
-	_delay_ms(20);	
+	initIRSensors();
+	
     while (1) {
 		getTrackDirection();
-		_delay_ms(200);
 		usart_send_char('\n');
+		_delay_ms(500);
     }
 }
 

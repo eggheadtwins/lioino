@@ -1,12 +1,4 @@
-
-#include <avr/io.h>
-#include <stdlib.h>
 #include <util/delay.h>
-#include "IR.h"
-#include "motor_control.h"
-#include "usart.h"
-#include "servo.h"
-
 
 void init(void){
 	initIRSensors();
@@ -16,9 +8,9 @@ void init(void){
 
 
 void test_IR(void){
-	usart_send_8bit(adc_read(ADC5D));
-	usart_send_8bit(adc_read(ADC4D));
-	usart_send_8bit(adc_read(ADC3D));
+	usart_send_8bit(read_adc(ADC5D));
+	usart_send_8bit(read_adc(ADC4D));
+	usart_send_8bit(read_adc(ADC3D));
 	_delay_ms(500);
 }
 

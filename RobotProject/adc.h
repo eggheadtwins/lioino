@@ -83,16 +83,11 @@ void conversion_init(void) {
 }
 
 
-uint8_t is_converting(void) {
-	return (ADCSRA & _BV(ADSC));
-}
-
-
-uint8_t adc_read(uint8_t pin) {
+uint16_t read_adc(uint8_t pin) {
 	pin_to_mux(pin); // Change channel
 	conversion_init();
 	
-	while(is_converting());
+	while(ADCSRA & _BV(ADSC));
 	
 	return ADC;
 
