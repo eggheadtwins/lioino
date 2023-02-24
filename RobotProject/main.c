@@ -5,34 +5,33 @@
 #include <stdlib.h>
 #include <util/delay.h>
 
+volatile int maxmotorspeed = 40;
+
 void test(void);
 
 int main(void) {
-	
 	pwm_timer_init();
 	usart_init();
 	initIRSensors();
 
     while (1) {
 		test();
-		_delay_ms(25);
     }
 }
 
 
 void test(void) {
-	uint8_t track_dir = getTrackDirection();
-
-	// 2 -> 40, 0
-	// 1 -> 40, 40
-	// 0 ->  0, 40
-	set_speed(min((track_dir) * 40, 40), min((track_dir-2) * -40, 40));
-
-	_delay_ms(3);
+	uint16_t track_dir = getTrackDirection();
+	//set_speed(min((track_dir) * maxmotorspeed, maxmotorspeed), min((track_dir-2) * -maxmotorspeed, maxmotorspeed));
+	uint16_t scalar = 12;
+	uint16_t leftMotorSpeed = (track_dir) / scalar;
+	uint16_t rightMotorSpeed = (1000-track_dir) / scalar;
+	leftMotorSpeed = (int) leftMotorSpeed;
+	rightMotorSpeed = (int) rightMotorSpeed;
+	set_speed(leftMotorSpeed, rightMotorSpeed);
+	_delay_ms(20);
 }
 
-
-
-void min(uint8_t a, uint8_t b){
+void min(uint16_t a, uint16_t b){
 	return (a < b)? a : b;
 }

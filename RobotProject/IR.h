@@ -17,11 +17,11 @@ void initIRSensors() {
 	adc_init();
 }
 
-// return a value under 1 ([0-1]) when we are on the left side of the track,
-// a value over 1 ([1-2]) when we are on the right side of the track
+// return a value under 1 ([0-500]) when we are on the left side of the track,
+// a value over 1 ([500-1000]) when we are on the right side of the track
 // the higher the absolute value, the more outward we are
 
-uint8_t getTrackDirection() {
+uint16_t getTrackDirection() {
 	// the higher the blacker, 8bit value
 	conversion_init();
 	uint16_t left_black   = read_adc(sensor_l);
@@ -51,13 +51,26 @@ uint8_t getTrackDirection() {
 	if(left_black > 700)
 		return 0;
 	if(right_black < 500)
-		return 2;
+		return 1000;
 
 	// inner
+	uint16_t average = left_black + center_black + right_black;
+	average/=3;
+	
+	if(average > 700)
+		average = 700;
+	else if(average < 500)
+		average = 500;
+	
+	// we are in between 500 and 700 here, we want range from 700 to 300
+	average -= 700;
+	average *= -2;
+	average += 300;
 	
 	
+	
+	usart_send_chars(center);
+	usart_send_16bit(average);
 
-	
-	
-	return 1;
+	return average;
 }
