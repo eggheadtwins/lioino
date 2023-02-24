@@ -40,6 +40,13 @@ void usart_send_8bit(uint8_t data){
 }
 
 
+void send(uint8_t * data){
+	while (*data){
+		usart_send_char(*data++);
+	}
+	
+}
+
 void usart_send_16bit(uint16_t data){
 	uint8_t string[10]; // Max 255, 4 Chars with '/0'.
 	int i = 0;

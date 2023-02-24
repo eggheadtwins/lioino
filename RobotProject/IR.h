@@ -29,11 +29,15 @@ uint8_t getTrackDirection() {
 	uint16_t center_black = read_adc(sensor_c);
 	conversion_init();
 	
+	uint8_t left[] = "LEFT: ";
+	uint8_t right[] = "\nRIGHT: ";
+	uint8_t center[] = "\nCENTER: ";
 	
+	send(left);
 	usart_send_16bit(left_black);
-	usart_send_char('\n');
+	send(right);
 	usart_send_16bit(right_black);
-	usart_send_char('\n');
+	send(center);
 	usart_send_16bit(center_black);
 	usart_send_char('\n');
 	
