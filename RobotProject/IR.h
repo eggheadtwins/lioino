@@ -33,6 +33,10 @@ uint8_t getTrackDirection() {
 	uint8_t left[] = "\n\nLEFT: ";
 	uint8_t right[] = "\nRIGHT: ";
 	uint8_t center[] = "\nCENTER: ";
+
+	// right-sensor calibration
+	uint8_t rightCalibration = right_black - ((left_black + center_black) / 2);
+	right_black -= rightCalibration;
 	
 	usart_send_chars(left);
 	usart_send_16bit(left_black);
@@ -41,24 +45,19 @@ uint8_t getTrackDirection() {
 	usart_send_chars(center);
 	usart_send_16bit(center_black);
 	
-	
-	if(left_black > 700)// || 
+	// border checking??
+
+	// outmost
+	if(left_black > 700)
 		return 0;
-	if(right_black < 500)//|| right_black > max_IR_val - IR_threshold)
+	if(right_black < 500)
 		return 2;
-/*
-	// positive if left is the blackest
-	float gradient = (left_black - center_black) + (center_black - right_black);
-	// divide by the approx. max. to normalize and get range ~[-1 : 1]
-	//gradient = gradient / 180; // edit this to calibrate sensors
-	// clip the value
-	if(gradient > 1) {
-		gradient = 1;
-	} else if(gradient < -1) {
-		gradient = -1;
-	}
+
+	// inner
 	
-	return gradient * FLIP_DIRECTION;
-*/
+	
+
+	
+	
 	return 1;
 }
