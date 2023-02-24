@@ -6,7 +6,8 @@
 #define sensor_c ADC4D
 #define sensor_r ADC3D
 
-#define IR_threshold 110
+#define IR_threshold 450
+#define max_IR_val 1024
 
 #define FLIP_DIRECTION 1
 
@@ -42,9 +43,9 @@ uint8_t getTrackDirection() {
 	usart_send_char('\n');
 	
 	
-	if(left_black > 255 - IR_threshold || left_black < IR_threshold)
+	if(left_black > max_IR_val - IR_threshold)// || left_black < IR_threshold)
 		return 0;
-	if(right_black > 255- IR_threshold || right_black < IR_threshold)
+	if(right_black > max_IR_val - IR_threshold)// || right_black < IR_threshold)
 		return 2;
 /*
 	// positive if left is the blackest

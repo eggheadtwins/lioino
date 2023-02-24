@@ -8,13 +8,11 @@
 void test(void);
 
 int main(void) {
-	
 	usart_init();
 	initIRSensors();
 	
     while (1) {
-		getTrackDirection();
-		usart_send_char('\n');
+		test();
 		_delay_ms(500);
     }
 }
@@ -23,10 +21,10 @@ int main(void) {
 void test(void) {
 	uint8_t track_dir = getTrackDirection();
 
-	// 1 -> 100, 0
-	//-1 -> 0, 100
-	// 0 -> 50, 50
-	set_speed((track_dir+1) * 50, (track_dir-1) * -50);
+	// 2 -> 50, 0
+	// 1 -> 25, 25
+	// 0 -> 0, 50
+	set_speed(track_dir * 25, (track_dir-2) * -25);
 
 	_delay_ms(3);
 }
