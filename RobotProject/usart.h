@@ -20,17 +20,17 @@ void usart_init(void){
 
 
 uint8_t is_recieve_complete(void){
-	return !(UCSR0A & _BV(RXC0));
+	return (UCSR0A & _BV(RXC0));
 	
 }
 
 uint8_t is_buffer_empty(void){
-	return !(UCSR0A & _BV(UDRE0));
+	return (UCSR0A & _BV(UDRE0));
 }
 
 
 void usart_send_char(uint8_t data){
-	while (is_buffer_empty());
+	while (!is_buffer_empty());
 	UDR0 = data;
 }
 
@@ -69,6 +69,6 @@ void usart_send_16bit(uint16_t data){
 
 
 uint8_t usart_recieve(){
-	while(is_recieve_complete());
+	while(!is_recieve_complete());
 	return UDR0;
 }
