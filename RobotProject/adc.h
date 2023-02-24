@@ -12,7 +12,7 @@
 
 
 void set_prescaler(void) {
-	switch(PRESCALER){ // Set prescaler.
+	switch(PRESCALER){ // Set Prescaler.
 		case 2:
 			ADCSRA |= _BV(ADPS0);
 			break;
@@ -41,16 +41,15 @@ void set_prescaler(void) {
 }
 
 void adc_init() {
-	ADCSRA |= _BV(ADEN); // Enable ADC
-	set_prescaler();
+	ADCSRA = _BV(ADEN); // Enable ADC
+	ADMUX = _BV(AREF); // VREF to AVCC (+5v)
+	set_prescaler(); 
 }
 
 
 
 void pin_to_mux(uint8_t pin) {
-	ADCSRA = _BV(ADEN); // Enable ADC
-	set_prescaler();
-	ADMUX |= _BV(AREF) | _BV(ADLAR) ; // VREF to AVCC (+5v) and Left adjust bits. 
+	ADMUX &= ~_BV(MUX3) & ~_BV(MUX2) & ~_BV(MUX1) & ~_BV(MUX0); // Reset MUX.
 	
 	switch(pin){ // Sets MUX values based on pins.
 		case ADC0D:
@@ -95,7 +94,7 @@ uint8_t adc_read(uint8_t pin) {
 	
 	while(is_converting());
 	
-	return ADCH;
+	return ADC;
 
 }
 

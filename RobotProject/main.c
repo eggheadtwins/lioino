@@ -8,21 +8,22 @@
 void test(void);
 
 int main(void) {
-	//initIRSensors();
+	initIRSensors();
 	pwm_timer_init();	
-	//usart_init();
+	usart_init();
 
-	set_speed(100, 100);
-	_delay_ms(20);
-
+	//set_speed(100, 100);
+	_delay_ms(20);	
     while (1) {
-		test();
+		getTrackDirection();
+		_delay_ms(200);
+		usart_send_char('\n');
     }
 }
 
 
 void test(void) {
-	float track_dir = getTrackDirection();
+	uint8_t track_dir = getTrackDirection();
 
 	// 1 -> 100, 0
 	//-1 -> 0, 100

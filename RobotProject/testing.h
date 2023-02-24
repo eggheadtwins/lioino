@@ -1,10 +1,11 @@
 
 #include <avr/io.h>
+#include <stdlib.h>
+#include <util/delay.h>
 #include "IR.h"
 #include "motor_control.h"
 #include "usart.h"
-#include <stdlib.h>
-#include <util/delay.h>
+#include "servo.h"
 
 
 void init(void){

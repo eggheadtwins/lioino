@@ -2,9 +2,9 @@
 #include <avr/sfr_defs.h>
 #include "adc.h"
 
-#define sensor_l PINC5
-#define sensor_c PINC4
-#define sensor_r PINC3
+#define sensor_l ADC5D 
+#define sensor_c ADC4D
+#define sensor_r ADC3D
 
 #define IR_threshold 120
 
@@ -23,11 +23,23 @@ void initIRSensors() {
 uint8_t getTrackDirection() {
 	// the higher the blacker, 8bit value
 	uint8_t left_black   = adc_read(sensor_l);
+	conversion_init();
 	uint8_t right_black  = adc_read(sensor_r);
+	conversion_init();
 	uint8_t center_black = adc_read(sensor_c);
-
+	conversion_init();
+	
+	
+	usart_send_8bit(left_black);
+	usart_send_char('\n');
+	usart_send_8bit(right_black);
+	usart_send_char('\n');
+	usart_send_8bit(center_black);
+	usart_send_char('\n');
+	
+	
 	if(left_black > 255 - IR_threshold || left_black < IR_threshold)
-		return -1;
+		return 0;
 	if(right_black > 255- IR_threshold || right_black < IR_threshold)
 		return 1;
 /*
@@ -44,5 +56,5 @@ uint8_t getTrackDirection() {
 	
 	return gradient * FLIP_DIRECTION;
 */
-return 1;
+	return 1;
 }
