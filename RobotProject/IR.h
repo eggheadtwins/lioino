@@ -6,7 +6,7 @@
 #define sensor_c ADC4D
 #define sensor_r ADC3D
 
-#define IR_threshold 120
+#define IR_threshold 110
 
 #define FLIP_DIRECTION 1
 
@@ -16,8 +16,8 @@ void initIRSensors() {
 	adc_init();
 }
 
-// return a negative value when we are on the left side of the track,
-// a positive value when we are on the right side of the track
+// return a value under 1 ([0-1]) when we are on the left side of the track,
+// a value over 1 ([1-2]) when we are on the right side of the track
 // the higher the absolute value, the more outward we are
 
 uint8_t getTrackDirection() {
@@ -41,7 +41,7 @@ uint8_t getTrackDirection() {
 	if(left_black > 255 - IR_threshold || left_black < IR_threshold)
 		return 0;
 	if(right_black > 255- IR_threshold || right_black < IR_threshold)
-		return 1;
+		return 2;
 /*
 	// positive if left is the blackest
 	float gradient = (left_black - center_black) + (center_black - right_black);
