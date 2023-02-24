@@ -25,38 +25,28 @@ void usart_send_char(uint8_t data){
 }
 
 
-void usart_send_8bit(uint8_t data){
-	uint8_t string[4]; // Max 255, 4 Chars with '/0'.
-	int i = 0;
-	
-	itoa(data, string, 10); // Convert Int to String.
-	
-	while (string[i] != '\0'){
-		usart_send_char(string[i++]);
-	}
-	
-	free(string);
-
-}
-
-
-void send(uint8_t * data){
+void usart_send_chars(uint8_t * data){
 	while (*data){
 		usart_send_char(*data++);
 	}
 	
 }
 
+void usart_send_8bit(uint8_t data){
+	uint8_t string[4]; // Max 255, 4 Chars with '/0'.	
+	itoa(data, string, 10); // Convert Int to String.
+	usart_send_chars(string);
+	free(string);
+
+}
+
+
 void usart_send_16bit(uint16_t data){
-	uint8_t string[10]; // Max 255, 4 Chars with '/0'.
-	int i = 0;
-	
+	uint8_t string[10]; // Max 1024, 5 Chars with '/0'.
 	itoa(data, string, 10); // Convert Int to String.
 	
-	while (string[i] != '\0'){
-		usart_send_char(string[i++]);
-	}
-	
+	usart_send_chars(string);
+
 	free(string);	
 	
 	

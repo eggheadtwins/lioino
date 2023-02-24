@@ -6,7 +6,7 @@
 #define sensor_c ADC4D
 #define sensor_r ADC3D
 
-#define IR_threshold 450
+#define IR_threshold 600
 #define max_IR_val 1024
 
 #define FLIP_DIRECTION 1
@@ -23,29 +23,28 @@ void initIRSensors() {
 
 uint8_t getTrackDirection() {
 	// the higher the blacker, 8bit value
+	conversion_init();
 	uint16_t left_black   = read_adc(sensor_l);
 	conversion_init();
 	uint16_t right_black  = read_adc(sensor_r);
 	conversion_init();
 	uint16_t center_black = read_adc(sensor_c);
-	conversion_init();
 	
-	uint8_t left[] = "LEFT: ";
+	uint8_t left[] = "\n\nLEFT: ";
 	uint8_t right[] = "\nRIGHT: ";
 	uint8_t center[] = "\nCENTER: ";
 	
-	send(left);
+	usart_send_chars(left);
 	usart_send_16bit(left_black);
-	send(right);
+	usart_send_chars(right);
 	usart_send_16bit(right_black);
-	send(center);
+	usart_send_chars(center);
 	usart_send_16bit(center_black);
-	usart_send_char('\n');
 	
 	
-	if(left_black > max_IR_val - IR_threshold)// || left_black < IR_threshold)
+	if(left_black > 700)// || 
 		return 0;
-	if(right_black > max_IR_val - IR_threshold)// || right_black < IR_threshold)
+	if(right_black < 500)//|| right_black > max_IR_val - IR_threshold)
 		return 2;
 /*
 	// positive if left is the blackest

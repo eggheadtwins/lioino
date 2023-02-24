@@ -8,12 +8,14 @@
 void test(void);
 
 int main(void) {
+	
+	pwm_timer_init();
 	usart_init();
 	initIRSensors();
-	
+
     while (1) {
 		test();
-		_delay_ms(500);
+		_delay_ms(25);
     }
 }
 
@@ -21,10 +23,16 @@ int main(void) {
 void test(void) {
 	uint8_t track_dir = getTrackDirection();
 
-	// 2 -> 50, 0
-	// 1 -> 25, 25
-	// 0 -> 0, 50
-	set_speed(track_dir * 25, (track_dir-2) * -25);
+	// 2 -> 40, 0
+	// 1 -> 40, 40
+	// 0 ->  0, 40
+	set_speed(min((track_dir) * 40, 40), min((track_dir-2) * -40, 40));
 
 	_delay_ms(3);
+}
+
+
+
+void min(uint8_t a, uint8_t b){
+	return (a < b)? a : b;
 }
