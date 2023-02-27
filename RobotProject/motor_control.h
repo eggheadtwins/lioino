@@ -52,6 +52,7 @@ void set_speed(int left_motor_speed, int right_motor_speed) {
 	if (left_motor_speed >= MOTOR_MINIMUM_SPEED && left_motor_speed <= MOTOR_MAXIMUM_SPEED && 
 		right_motor_speed >= MOTOR_MINIMUM_SPEED && right_motor_speed <= MOTOR_MAXIMUM_SPEED){
 		
+		
 		//Set OCnx values
 		LEFT_MOTOR_OCnx = (left_motor_speed * MOTOR_PWM_TIMER_TOP) / 100;
 		RIGHT_MOTOR_OCnx = (right_motor_speed * MOTOR_PWM_TIMER_TOP) / 100;
