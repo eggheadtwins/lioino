@@ -25,7 +25,7 @@ void servo_init(void){
 
 
 void set_angle(int angle){
-	angle = (angle > 180)? 180 : angle;
+	angle = (angle > SERVO_MINIMUM_ANGLE)? 180 : angle;
 	
 	int pulseWidth = angle * 11 + 500;
 	
