@@ -28,7 +28,7 @@ void test(void) {
 	leftMotorSpeed = (int) leftMotorSpeed;
 	rightMotorSpeed = (int) rightMotorSpeed;
 	set_speed(leftMotorSpeed, rightMotorSpeed);
-	_delay_ms(20);
+	_delay_ms(100);
 }
 
 void min(uint16_t a, uint16_t b){
