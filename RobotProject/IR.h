@@ -6,15 +6,15 @@
 #define sensor_c ADC4D
 #define sensor_r ADC3D
 
-#define sensor_bl ADC0D
-#define sensor_br ADC1D
+#define sensor_bl ADC1D
+#define sensor_br ADC0D
 
 #define IR_threshold 600
 #define max_IR_val 1024
 
 #define FLIP_DIRECTION 1
 
-#define outmost_smoothness 4 // lower values will make the robot turn slower in corners
+#define outmost_smoothness 8 // lower values will make the robot turn slower in corners
 
 
 
@@ -42,6 +42,9 @@ uint16_t getTrackDirection() {
 	// right-sensor calibration
 	uint8_t rightCalibration = right_black - ((left_black + center_black) / 2);
 	right_black -= rightCalibration;
+	
+	// back sensors calibration (back sensors go below 800 if outward, otherwise higher)
+	back_left_black -= 40;
 	
 	
 	uint8_t left[] = "\n\nLEFT: ";
