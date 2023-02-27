@@ -22,8 +22,7 @@ int main(void) {
 
 void test(void) {
 	uint16_t track_dir = getTrackDirection();
-	//set_speed(min((track_dir) * maxmotorspeed, maxmotorspeed), min((track_dir-2) * -maxmotorspeed, maxmotorspeed));
-	uint16_t scalar = 12;
+	uint16_t scalar = 12; //min 10, because set_speed takes max 100
 	uint16_t leftMotorSpeed = (track_dir) / scalar;
 	uint16_t rightMotorSpeed = (1000-track_dir) / scalar;
 	leftMotorSpeed = (int) leftMotorSpeed;
