@@ -61,7 +61,7 @@ uint16_t getTrackDirection() {
 	
 	
 	// border checking??
-
+/*
 	// outmost
 	if(left_black > 600)
 		return (1000-left_black)/outmost_smoothness;
@@ -82,5 +82,5 @@ uint16_t getTrackDirection() {
 	average *= -2;
 	average += 300;
 
-	return average;
+	return average;*/
 }
