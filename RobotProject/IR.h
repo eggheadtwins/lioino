@@ -28,15 +28,10 @@ void initIRSensors() {
 
 uint16_t getTrackDirection() {
 	// the higher the blacker, 8bit value
-	conversion_init();
 	uint16_t left_black   = read_adc(sensor_l);
-	conversion_init();
 	uint16_t right_black  = read_adc(sensor_r);
-	conversion_init();
 	uint16_t center_black = read_adc(sensor_c);
-	conversion_init();
 	uint16_t back_left_black = read_adc(sensor_bl);
-	conversion_init();
 	uint16_t back_right_black = read_adc(sensor_br);
 	
 	// right-sensor calibration
@@ -54,10 +49,10 @@ uint16_t getTrackDirection() {
 	
 	usart_send_chars(left);
 	usart_send_16bit(left_black);
-	//usart_send_chars(center);
-	//usart_send_16bit(center_black);
-	//usart_send_chars(right);
-	//usart_send_16bit(right_black);
+	usart_send_chars(center);
+	usart_send_16bit(center_black);
+	usart_send_chars(right);
+	usart_send_16bit(right_black);
 	
 	usart_send_chars(backleft);
 	usart_send_16bit(back_left_black);
