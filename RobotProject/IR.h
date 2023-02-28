@@ -32,7 +32,7 @@ uint16_t getTrackDirection() {
 	//uint16_t right_black  = read_adc(sensor_r);
 	//uint16_t center_black = read_adc(sensor_c);
 	uint16_t back_right_black = read_adc(sensor_br);
-	uint16_t back_left_black = read_adc(sensor_bl);
+	//uint16_t back_left_black = read_adc(sensor_bl);
 	
 	// right-sensor calibration
 	//uint8_t rightCalibration = right_black - ((left_black + center_black) / 2);
@@ -52,14 +52,14 @@ uint16_t getTrackDirection() {
 	usart_send_chars(center);
 	usart_send_16bit(center_black);
 	usart_send_chars(right);
-	usart_send_16bit(right_black);*/
+	usart_send_16bit(right_black);
 	
 	usart_send_chars(backleft);
-	usart_send_16bit(back_left_black);
+	usart_send_16bit(back_left_black);*/
 	usart_send_chars(backright);
 	usart_send_16bit(back_right_black);
 	
-	/*
+	
 	// border checking??
 
 	// outmost
@@ -82,5 +82,5 @@ uint16_t getTrackDirection() {
 	average *= -2;
 	average += 300;
 
-	return average;*/
+	return average;
 }
