@@ -28,9 +28,9 @@ void initIRSensors() {
 
 uint16_t getTrackDirection() {
 	// the higher the blacker, 8bit value
-	uint16_t left_black   = read_adc(sensor_l);
-	uint16_t right_black  = read_adc(sensor_r);
-	uint16_t center_black = read_adc(sensor_c);
+	//uint16_t left_black   = read_adc(sensor_l);
+	//uint16_t right_black  = read_adc(sensor_r);
+	//uint16_t center_black = read_adc(sensor_c);
 	uint16_t back_left_black = read_adc(sensor_bl);
 	uint16_t back_right_black = read_adc(sensor_br);
 	
@@ -56,8 +56,8 @@ uint16_t getTrackDirection() {
 	
 	usart_send_chars(backleft);
 	usart_send_16bit(back_left_black);
-	//usart_send_chars(backright);
-//	usart_send_16bit(back_right_black);
+	usart_send_chars(backright);
+	usart_send_16bit(back_right_black);
 	
 	
 	// border checking??
