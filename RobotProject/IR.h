@@ -43,8 +43,7 @@ uint16_t getTrackDirection() {
 	uint8_t rightCalibration = right_black - ((left_black + center_black) / 2);
 	right_black -= rightCalibration;
 	
-	// back sensors calibration (back sensors go below 800 if outward, otherwise higher)
-	back_left_black -= 40;
+	// back sensors go below 800 if outward, otherwise higher
 	
 	
 	uint8_t left[] = "\n\nLEFT: ";
