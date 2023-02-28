@@ -2,8 +2,10 @@
 #include "IR.h"
 #include "motor_control.h"
 #include "usart.h"
+#include "ultrasonic.h"
 #include <stdlib.h>
 #include <util/delay.h>
+#include <avr/interrupt.h>
 
 volatile int maxmotorspeed = 40;
 
@@ -13,9 +15,15 @@ int main(void) {
 	pwm_timer_init();
 	usart_init();
 	initIRSensors();
+	ultrasonic_init();
 
     while (1) {
-		test();
+		trigger();
+		usart_send_16bit(pulse_width);
+		usart_send_char('\n');
+		_delay_ms(100);
+		
+		//test();
     }
 }
 
@@ -34,3 +42,4 @@ void test(void) {
 void min(uint16_t a, uint16_t b){
 	return (a < b)? a : b;
 }
+
