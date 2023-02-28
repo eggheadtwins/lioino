@@ -18,12 +18,7 @@ int main(void) {
 	ultrasonic_init();
 
     while (1) {
-		trigger();
-		usart_send_16bit(pulse_width);
-		usart_send_char('\n');
-		_delay_ms(100);
-		
-		//test();
+		test();
     }
 }
 

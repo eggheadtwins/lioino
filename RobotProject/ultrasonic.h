@@ -29,7 +29,7 @@
 
 
 volatile uint16_t pulse_width = 0;
-volatile uint8_t is_pulse_recieved = 0;
+volatile uint8_t is_triggered = 0;
 
 void ultrasonic_init(){
 	// Set Trigger pin as OUTPUT, and ECHO pin as INPUT.
@@ -58,15 +58,15 @@ void trigger(void){
 
 ISR(ECHO_INTx_VECTOR){
 	// HIGH TO LOW
-	if (is_pulse_recieved == 1){
+	if (is_triggered == 1){
 		TCCR1B = 0;	// Stop timer.
 		pulse_width = TCNT1;
-		is_pulse_recieved = 0;
+		is_triggered = 0;
 		TCNT1 = 0;
 		
 	// LOW TO HIGH
-	} else if (is_pulse_recieved == 0){
-		is_pulse_recieved = 1;
+	} else if (is_triggered == 0){
+		is_triggered = 1;
 		TCCR1B |= (1<<CS10); // Start timer
 	}
 	
