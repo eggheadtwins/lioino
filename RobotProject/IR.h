@@ -54,10 +54,10 @@ uint16_t getTrackDirection() {
 	
 	usart_send_chars(left);
 	usart_send_16bit(left_black);
-	usart_send_chars(center);
-	usart_send_16bit(center_black);
-	usart_send_chars(right);
-	usart_send_16bit(right_black);
+	//usart_send_chars(center);
+	//usart_send_16bit(center_black);
+	//usart_send_chars(right);
+	//usart_send_16bit(right_black);
 	
 	usart_send_chars(backleft);
 	usart_send_16bit(back_left_black);
@@ -86,11 +86,6 @@ uint16_t getTrackDirection() {
 	average -= 700;
 	average *= -2;
 	average += 300;
-	
-	if(average < 500 && average > 420)
-		average -= 100;
-	else if(average > 500 && average < 580)
-		average += 100;
 
 	return average;
 }
