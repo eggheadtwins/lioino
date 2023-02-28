@@ -1,52 +1,60 @@
 #include <avr/io.h>
 #include <avr/sfr_defs.h>
 #include <util/delay.h>
-#include <time.h>
+#include <avr/interrupt.h>
 
 #define TRIGGER_DDRx
-#define ECHO_DDRx
-#define TRIGGER_PIN
-#define ECHO_PIN
 #define TRIGGER_PORTx
+#define TRIGGER_PIN
+#define TRIGGER_FREQUENCY
+
+#define ECHO_DDRx
 #define ECHO_PORTx
+#define ECHO_INTx
+#define ECHO_PIN
+#define ECHO_INTx_VECTOR
 
-#define HIGH 1
-#define LOW 0
+#define INTERRUPT_SENSE_CONTROL (_BV(ISC00));
 
-
+volatile uint16_t pulse_width = 0;
+volatile uint8_t is_pulse_recieved = 0;
 
 void ultrasonic_init(){
 	TRIGGER_DDRx |= _BV(TRIGGER_PIN);
 	ECHO_PIN &= ~_BV(ECHO_PIN);
 	
+	PCICR |= _BV(PCIE0);
+	PCMSK0 |= _BV(ECHO_INTx);
+	
+	sei();
+	
 }
 
-uint16_t get_distance(){
+
+void trigger(void){
 	TRIGGER_PORTx &= ~_BV(TRIGGER_PIN);
-	_delay_ms(2);
+	_delay_ms(TRIGGER_FREQUENCY);
 	TRIGGER_PORTx |= _BV(TRIGGER_PIN);
-	_delay_ms(10);
-	TRIGGER_PORTx &= ~_BV(TRIGGER_PIN);
-	
-	int duration = pulseIn(ECHO_PIN, HIGH);
-	
 	
 }
 
-void pulseIn(uint8_t echo_pin, uint8_t is_high){
-	int duration;
-	int msec;
-	clock_t start = clock();
+uint16_t get_pulse_width(void){
+	while(is_pulse_recieved == 0);
 	
-	while(!bit_is_low());
-	
-	duration = clock() - start;
-
-	
+	return pulse_width;
 	
 }
 
-void bit_is_low(){
-	// 
+ISR(ECHO_INTx_VECTOR){
+	if ((ECHO_PORTx & (1<<ECHO_PIN)) == 0){
+		TCCR1B = 0;	// Stop timer.
+		pulse_width = TCNT1;
+		is_pulse_recieved = 1;
+		TCNT1 = 0;
+	} else {
+		is_pulse_recieved = 0;
+		TCCR1B |= (1<<CS10); // Start timer
+	}	
+	
 	
 }
