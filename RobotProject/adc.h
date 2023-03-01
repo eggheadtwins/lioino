@@ -50,9 +50,9 @@ void adc_init() {
 
 void pin_to_mux(uint8_t pin) {
 	ADMUX &= ~_BV(MUX3) & ~_BV(MUX2) & ~_BV(MUX1) & ~_BV(MUX0); // Reset MUX.
-	
 	switch(pin){ // Sets MUX values based on pins.
 		case ADC0D:
+			ADMUX &= ~_BV(MUX3) & ~_BV(MUX2) & ~_BV(MUX1) & ~_BV(MUX0);
 			break;
 		case ADC1D:
 			ADMUX |= _BV(MUX0);
