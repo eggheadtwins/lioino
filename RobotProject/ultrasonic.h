@@ -25,8 +25,23 @@
 #elif ECHO_INTERRUPT_REGISTER == PCIE2
 #	define ECHO_PIN_CHANGE_REGISTER PCMSK2
 #	define ECHO_INTx_VECTOR PCINT2_vect
+
 #endif
 
+
+#define PRESCALER 8
+
+#if PRESCALER == 1
+#	define PRESCALER_BITS (_BV(CS10))
+#elif PRESCALER == 8 
+#	define PRESCALER_BITS (_BV(CS11))
+#elif PRESCALER == 64 
+#	define PRESCALER_BITS (_BV(CS11) | _BV(CS10))
+#elif PRESCALER == 256 
+#	define PRESCALER_BITS (_BV(CS12))
+#elif PRESCALER == 1024
+#	define PRESCALER_BITS (_BV(CS12) | _BV(CS10))
+#endif
 
 volatile uint16_t pulse_width = 0;
 volatile uint8_t is_triggered = 0;
@@ -56,18 +71,18 @@ void trigger(void){
 }
 
 
+
 ISR(ECHO_INTx_VECTOR){
-	// HIGH TO LOW
+	// ECHO pin goes from HIGH to LOW, when signal received. 
 	if (is_triggered == 1){
-		TCCR1B = 0;	// Stop timer.
+		TCCR1B = is_triggered = TCNT1 = 0; // Stop timer, reset ticks.
 		pulse_width = TCNT1;
-		is_triggered = 0;
-		TCNT1 = 0;
+
 		
-	// LOW TO HIGH
+	// The ECHO pin is set HIGH when triggered. So, the timer starts here.
 	} else if (is_triggered == 0){
 		is_triggered = 1;
-		TCCR1B |= (1<<CS10); // Start timer
+		TCCR1B |= PRESCALER_BITS; // Start timer
 	}
 	
 	
