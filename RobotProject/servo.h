@@ -19,11 +19,9 @@
 #define MAXIMUM_ANGLE 180
 
 
-
+volatile uint8_t previous_angle = 0;
 void servo_init(void){
 	SERVO_DDRx |= _BV(SERVO_PIN);
-	TCCR1A |= _BV(COM1B1) | _BV(WGM11); // PWM Phase Correct. 
-	ICR1 = 4999; // Top value
 }
 
 void set(uint8_t angle){
@@ -32,7 +30,16 @@ void set(uint8_t angle){
 
 
 void set_angle(int angle){
-	angle = (angle > MAXIMUM_ANGLE)? 180 : angle;
+	int start_angle = 0;
+	int end_angle = 0;
+	if (angle < previous_angle){
+		start_angle = angle;
+		end_angle = MINIMUM_ANGLE;
+	}else if(angle > previous_angle){
+		start_angle = MINIMUM_ANGLE;
+		end_angle = angle;
+		
+	}
 	
 	for (uint8_t i = 0; i <= MAXIMUM_ANGLE; i++)
 	{
@@ -43,6 +50,9 @@ void set_angle(int angle){
 		SERVO_PORT &= ~_BV(SERVO_PIN);
 		_delay_ms(20);
 	}
+	
+	previous_angle = angle;
+	
 	
 	
 }
