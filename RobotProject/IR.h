@@ -75,10 +75,9 @@ uint16_t getTrackDirection() {
 	else if(average < 300)
 		return 1000;
 	
-	// we are in between 300 and 700 here, we want range from 700 to 300 (middle is 500)
+	// we are in between 300 and 700 here, we want range from 1000 to 0
 	average -= 700;
-	average *= -1;
-	average += 300;
-
+	average *= -2.5;
+	
 	return average;
 }
