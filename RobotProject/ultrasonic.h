@@ -29,7 +29,7 @@
 #endif
 
 
-#define PRESCALER 8
+#define PRESCALER 64
 
 #if PRESCALER == 1
 #	define PRESCALER_BITS (_BV(CS10))
@@ -43,8 +43,8 @@
 #	define PRESCALER_BITS (_BV(CS12) | _BV(CS10))
 #endif
 
-volatile uint16_t pulse_width = 0;
-volatile uint8_t is_triggered = 0;
+volatile uint16_t pulse_width = 0; // Stores the time taken to reach the receiver. 
+volatile uint8_t is_triggered = 0; // If the transmitter is set HIGH. 
 
 void ultrasonic_init(){
 	// Set Trigger pin as OUTPUT, and ECHO pin as INPUT.
