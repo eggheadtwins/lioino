@@ -13,7 +13,7 @@
 void usart_init(void){
 	UBRR0H = (MYUBRR >> 8); //eight least significant bits of BAUD.
 	UBRR0L = MYUBRR; // 4 significant bits of BAUD.
-	UCSR0B = _BV(TXEN0) | _BV(RXEN0); //enable transmit and receive
+	UCSR0B = _BV(TXEN0) | _BV(RXEN0) | _BV(RXCIE0); //enable transmit and receive, and On receive interrupt.
 	UCSR0C |= _BV(UCSZ01) | _BV(UCSZ00);
 	UCSR0C &= ~_BV(UMSEL00) & ~_BV(UPM00) & ~_BV(USBS0);
 }

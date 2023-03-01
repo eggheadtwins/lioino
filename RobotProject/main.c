@@ -3,12 +3,13 @@
 #include "motor_control.h"
 #include "usart.h"
 #include "ultrasonic.h"
+#include "servo.h"
 #include <stdlib.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
 volatile int maxmotorspeed = 40;
-
+volatile uint8_t command;
 void test(void);
 
 int main(void) {
@@ -16,9 +17,11 @@ int main(void) {
 	usart_init();
 	initIRSensors();
 	ultrasonic_init();
+	servo_init();
 
     while (1) {
-		test();
+		//set_angle(90);
+		
     }
 }
 
@@ -36,5 +39,12 @@ void test(void) {
 
 void min(uint16_t a, uint16_t b){
 	return (a < b)? a : b;
+}
+
+
+ISR(USART_RX_vect){
+	command = UDR0;
+	
+	
 }
 
