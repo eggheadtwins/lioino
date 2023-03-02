@@ -30,11 +30,11 @@ int main(void) {
 			
 		}else if (command  == PENALTY){
 			set_speed(0, 0);
+			_delay_ms(5000);
+			test();
 			
 		}else if(command == STOP){
 			set_speed(0, 0);
-			 _delay_ms(5000);
-			test();
 		}
 
 
