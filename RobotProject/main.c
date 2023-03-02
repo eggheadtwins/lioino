@@ -58,7 +58,7 @@ void test(void) {
 	} else {
 		if(track_dir == 0) {
 			leftMotorSpeed = 99;
-			rightMotorSpeed = 0;
+			rightMotorSpeed = 30;
 		} else {
 			leftMotorSpeed = 0;
 			rightMotorSpeed = 99;
