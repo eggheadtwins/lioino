@@ -39,9 +39,16 @@ int main(void) {
 
 void test(void) {
 	uint16_t track_dir = getTrackDirection();
-	uint16_t scalar = 10;
-	if(track_dir < 680 && track_dir > 320)
-		scalar /= 2;
+	// the closer to 500, scalar moves closer to 6 -> higher speed
+	int middleDist = ((int)track_dir - 500);
+	if(middleDist < 0)
+		middleDist *= -1;
+	// range from [0 ~ 500]: 0 -> 6, 500 -> 11
+	uint16_t scalar = middleDist / 100 + 6;
+	
+	usart_send_16bit(scalar);
+	
+
 	uint16_t leftMotorSpeed = min((1000-track_dir) / scalar, 1000);
 	uint16_t rightMotorSpeed = min((track_dir) / scalar, 1000);
 	leftMotorSpeed = (int) leftMotorSpeed;
