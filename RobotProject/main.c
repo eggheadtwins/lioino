@@ -57,8 +57,8 @@ void test(void) {
 		rightMotorSpeed = track_dir / scalar;
 	} else {
 		if(track_dir == 0) {
-			leftMotorSpeed = 65;
-			rightMotorSpeed = 35;
+			leftMotorSpeed = 80;
+			rightMotorSpeed = 20;
 		} else {
 			leftMotorSpeed = 0;
 			rightMotorSpeed = 99;
