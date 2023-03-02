@@ -70,21 +70,7 @@ int min(int a, int b){
 
 
 ISR(USART_RX_vect){
-//	usart_send_char(UDR0);
-	command = UDR0;
-//	if(UDR0 == 'A'){
-//		while(1){
-//			test();
-//			
-//			if(UDR0 == 'B'){
-//				set_speed(0, 0);
-//				return;
-//			}
-//		}
-//		
-//	}
-	
-	
+	command = UDR0;	
 	
 }
 
