@@ -43,19 +43,24 @@ int main(void) {
 
 void test(void) {
 	uint16_t track_dir = getTrackDirection();
-	// the closer to 500, scalar moves closer to 6 -> higher speed
-	int middleDist = ((int)track_dir - 500);
-	if(middleDist < 0)
-		middleDist *= -1;
-	// range from [0 ~ 500]: 0 -> 6, 500 -> 11
-	uint16_t scalar = middleDist / 100 + 6;
+	uint16_t leftMotorSpeed;
+	uint16_t rightMotorSpeed;
+	
+	if(track_dir != 0 && track_dir != 1000) {
+		// the closer to 500, scalar moves closer to 6 -> higher speed
+		int middleDist = ((int)track_dir - 500);
+		if(middleDist < 0)
+			middleDist *= -1;
+		// range from [0 ~ 500]: 0 -> 6, 500 -> 11
+		uint16_t scalar = middleDist / 100 + 6;
 
-	uint16_t leftMotorSpeed = min((1000-track_dir) / scalar, 100);
-	uint16_t rightMotorSpeed = min((track_dir) / scalar, 100);
-	leftMotorSpeed = (int) leftMotorSpeed;
-	rightMotorSpeed = (int) rightMotorSpeed;
+		leftMotorSpeed = (int) min((1000-track_dir) / scalar, 100);
+		rightMotorSpeed = (int) min((track_dir) / scalar, 100);
+	} else {
+		leftMotorSpeed = (1000-track_dir) / 100;
+		rightMotorSpeed = track_dir / 100;
+	}	
 	set_speed(leftMotorSpeed, rightMotorSpeed);
-	_delay_ms(1);
 }
 
 int min(int a, int b){
