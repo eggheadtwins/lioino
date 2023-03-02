@@ -52,6 +52,16 @@ void usart_send_16bit(uint16_t data){
 	
 }
 
+void usart_send_int(int data){
+	uint8_t string[24];
+	
+	itoa(data, string, 10);
+	
+	usart_send_chars(string);
+	free(string);
+	
+}
+
 
 uint8_t usart_recieve(){
 	while(!(UCSR0A & _BV(RXC0)));

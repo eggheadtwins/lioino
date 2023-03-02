@@ -21,7 +21,16 @@ int main(void) {
 	sei();
 
     while (1) {
-		test();
+		if(command == 'A'){
+			test();
+		}else if(command == 'B'){
+			set_speed(0, 0);
+		}else{
+			usart_send_chars(command);
+		}
+		
+		
+		//test();
 		
 		
     }
@@ -47,19 +56,19 @@ int min(int a, int b){
 
 
 ISR(USART_RX_vect){
-	usart_send_char(UDR0);
-	if(UDR0 == 'A'){
-		while(1){
-			test();
-			
-		}
-	}else if(UDR0 == 'B'){
-		while(1){
-			
-			
-		}
-		
-	}
+//	usart_send_char(UDR0);
+	command = UDR0;
+//	if(UDR0 == 'A'){
+//		while(1){
+//			test();
+//			
+//			if(UDR0 == 'B'){
+//				set_speed(0, 0);
+//				return;
+//			}
+//		}
+//		
+//	}
 	
 	
 	
