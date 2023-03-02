@@ -57,7 +57,6 @@ void test(void) {
 		rightMotorSpeed = track_dir / scalar;
 	} else {
 		set_speed(0,0);
-		_delay_ms(1);
 		if(track_dir != 0)
 			track_dir /= 10;
 		leftMotorSpeed = (100-track_dir);
