@@ -8,6 +8,10 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
+#define START 'A'
+#define PENALTY 'B'
+#define STOP 'C'
+
 volatile int maxmotorspeed = 40;
 volatile uint8_t command;
 void test(void);
@@ -20,24 +24,21 @@ int main(void) {
 	servo_init();
 	sei();
 
-    while (1) {		
-		if(command == 'A'){
+	while(1){
+		if(command == START){
+			test();
 			
-			while(1){
-				test();
-				
-				if(command == 'B'){
-					set_speed(0, 0);
-					break;
-				}
-			}
+		}else if (command  == PENALTY){
+			set_speed(0, 0);
+			
+		}else if(command == STOP){
+			set_speed(0, 0);
+			 _delay_ms(5000);
+			test();
 		}
-		
-		
-		//test();
-		
-		
-    }
+
+
+	}
 }
 
 
