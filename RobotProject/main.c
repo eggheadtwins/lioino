@@ -61,7 +61,7 @@ void test(void) {
 		leftMotorSpeed = (100-track_dir);
 		rightMotorSpeed = track_dir;
 	}
-	set_speed(leftMotorSpeed, rightMotorSpeed);
+	set_speed(rightMotorSpeed, leftMotorSpeed);
 }
 
 int min(int a, int b){
