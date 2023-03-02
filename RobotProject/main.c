@@ -25,7 +25,16 @@ int main(void) {
 	sei();
 	
 	while(1){
-		test();
+		if(command == START){
+			while(1){
+				test();
+				
+				if(command == STOP){
+					set_speed(0, 0);
+					break;
+				}
+			}
+		}
 	}
 }
 
