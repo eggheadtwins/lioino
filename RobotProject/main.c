@@ -49,8 +49,8 @@ void test(void) {
 	usart_send_16bit(scalar);
 	
 
-	uint16_t leftMotorSpeed = min((1000-track_dir) / scalar, 1000);
-	uint16_t rightMotorSpeed = min((track_dir) / scalar, 1000);
+	uint16_t leftMotorSpeed = min((1000-track_dir) / scalar, 100);
+	uint16_t rightMotorSpeed = min((track_dir) / scalar, 100);
 	leftMotorSpeed = (int) leftMotorSpeed;
 	rightMotorSpeed = (int) rightMotorSpeed;
 	set_speed(leftMotorSpeed, rightMotorSpeed);
