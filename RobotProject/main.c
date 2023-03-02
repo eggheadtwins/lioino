@@ -20,13 +20,17 @@ int main(void) {
 	servo_init();
 	sei();
 
-    while (1) {
+    while (1) {		
 		if(command == 'A'){
-			test();
-		}else if(command == 'B'){
-			set_speed(0, 0);
-		}else{
-			usart_send_chars(command);
+			
+			while(1){
+				test();
+				
+				if(command == 'B'){
+					set_speed(0, 0);
+					break;
+				}
+			}
 		}
 		
 		
@@ -47,7 +51,7 @@ void test(void) {
 	uint16_t scalar = middleDist / 100 + 6;
 	
 	usart_send_16bit(scalar);
-	
+	usart_send_char('\n');
 
 	uint16_t leftMotorSpeed = min((1000-track_dir) / scalar, 100);
 	uint16_t rightMotorSpeed = min((track_dir) / scalar, 100);
