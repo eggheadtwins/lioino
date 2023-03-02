@@ -27,7 +27,6 @@ int main(void) {
 	while(1){
 		test();
 	}
-
 }
 
 
@@ -47,18 +46,9 @@ void test(void) {
 		leftMotorSpeed  = (1000-track_dir) / scalar;
 		rightMotorSpeed = (track_dir) / scalar;
 	} else {
-		if(track_dir == 0) {
-			leftMotorSpeed  = 0;
-			rightMotorSpeed = 100;
-		} else {
-			leftMotorSpeed  = 100;
-			rightMotorSpeed = 0;
-		}
+		leftMotorSpeed = (1000-track_dir) / 100;
+		leftMotorSpeed = track_dir / 100;
 	}
-	if(leftMotorSpeed < 0)
-		leftMotorSpeed = 0;
-	if(rightMotorSpeed < 0)
-		rightMotorSpeed = 0;
 	set_speed(leftMotorSpeed, rightMotorSpeed);
 }
 
@@ -68,7 +58,5 @@ int min(int a, int b){
 
 
 ISR(USART_RX_vect){
-	command = UDR0;	
-	
+	command = UDR0;
 }
-
