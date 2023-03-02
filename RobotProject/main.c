@@ -49,9 +49,6 @@ void test(void) {
 		middleDist *= -1;
 	// range from [0 ~ 500]: 0 -> 6, 500 -> 11
 	uint16_t scalar = middleDist / 100 + 6;
-	
-	usart_send_16bit(scalar);
-	usart_send_char('\n');
 
 	uint16_t leftMotorSpeed = min((1000-track_dir) / scalar, 100);
 	uint16_t rightMotorSpeed = min((track_dir) / scalar, 100);

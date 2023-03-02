@@ -62,7 +62,7 @@ uint16_t getTrackDirection() {
 	// outmost
 	if(left_black > 740)
 		return 1000;
-	if(right_black < 290) 
+	if(right_black < 270)
 		return 0;
 		
 	// inner
@@ -70,10 +70,10 @@ uint16_t getTrackDirection() {
 	average/=3;
 	
 	// to be sure, I take borders again
-	if(average > 690)
-		return 1000;
-	else if(average < 310)
-		return 0;
+	if(average > 700)
+		return 940;
+	else if(average < 300)
+		return 60;
 	
 	// we are in between 300 and 700 here, we want range from 100 to 900
 	average -= 300;
