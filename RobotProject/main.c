@@ -59,7 +59,7 @@ void test(void) {
 		if(track_dir != 0) 
 			track_dir /= 100;
 		leftMotorSpeed = (100-track_dir);
-		leftMotorSpeed = track_dir;
+		rightMotorSpeed = track_dir;
 	}
 	set_speed(leftMotorSpeed, rightMotorSpeed);
 }
