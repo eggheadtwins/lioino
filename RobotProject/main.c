@@ -36,27 +36,25 @@ int main(void) {
 		}else if(command == STOP){
 			set_speed(0, 0);
 		}
-
-
 	}
 }
 
 
 void test(void) {
-	uint16_t track_dir = getTrackDirection();
-	uint16_t leftMotorSpeed;
-	uint16_t rightMotorSpeed;
+	int track_dir = (int) getTrackDirection();
+	int leftMotorSpeed;
+	int rightMotorSpeed;
 	
-	if(track_dir > 2 && track_dir < 998) {
+	if(track_dir != 0 && track_dir != 1000) {
 		// the closer to 500, scalar moves closer to 6 -> higher speed
-		int middleDist = ((int)track_dir - 500);
+		int middleDist = track_dir - 500;
 		if(middleDist < 0)
 			middleDist *= -1;
 		// range from [0 ~ 500]: 0 -> 6, 500 -> 11
-		uint16_t scalar = (uint16_t) (middleDist / 100 + 6);
+		int scalar = (middleDist / 100 + 6);
 
-		leftMotorSpeed  = (int) min((1000-track_dir) / scalar, 100);
-		rightMotorSpeed = (int) min((track_dir) / scalar, 100);
+		leftMotorSpeed  = min((1000-track_dir) / scalar, 100);
+		rightMotorSpeed = min((track_dir) / scalar, 100);
 	} else {
 		leftMotorSpeed  = (1000-track_dir) / 100;
 		rightMotorSpeed = track_dir / 100;
