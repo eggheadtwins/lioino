@@ -79,7 +79,7 @@ uint16_t getTrackDirection() {
 	
 	// push middles towards the outside
 	if(average < 450 && average > 180)
-		average -= 70;
+		average -= 120;
 	
 	return average;
 }
