@@ -35,7 +35,7 @@ uint16_t getTrackDirection() {
 	uint16_t back_left_black = read_adc(sensor_bl);
 	
 	// right-sensor calibration
-	uint8_t rightCalibration = right_black - ((left_black + center_black) / 2);
+	uint16_t rightCalibration = right_black - ((left_black + center_black) / 2);
 	right_black -= rightCalibration;
 		
 	/*
@@ -77,7 +77,7 @@ uint16_t getTrackDirection() {
 	
 	// average range is 300 : 700
 	average -= 300; // 0 : 400
-	average *= 2.5; // 0 : 1000
+	average *= 2; // 0 : 1000
 	
 	return average;
 }
