@@ -62,7 +62,7 @@ uint16_t getTrackDirection() {
 	// outmost
 	if(left_black > 700)
 		return 1000;
-	if(right_black < 310)
+	if(right_black < 330)
 		return 0;
 		
 	// inner
@@ -72,12 +72,12 @@ uint16_t getTrackDirection() {
 	// to be sure, I take borders again
 	if(average > 700)
 		return 1000;
-	else if(average < 300)
+	else if(average < 330)
 		return 0;
 	
-	// average range is 300 : 700
-	average -= 300;		// 0 :  400
-	average *= 2.5;		// 0 :  1000
+	// average range is 330 : 700
+	average -= 330;		// 0 :  370
+	average *= 2.7;		// 0 :  1000
 	
 	// push middles towards the outside
 	/*
