@@ -5,7 +5,7 @@
 #define F_CPU 16000000UL
 #endif
 
-#define PRESCALER 4
+#define PRESCALER 16
 #define AREF REFS0
 
 void set_prescaler(void) {
