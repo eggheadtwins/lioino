@@ -78,5 +78,12 @@ uint16_t getTrackDirection() {
 	// average range is 300 : 700
 	average -= 300;		// 0 :  400
 	average *= 2.5;		// 0 : 1000
+	
+	// push middles towards the outside
+	if(average < 420 && average > 180)
+		average -= 100;
+	if(average > 580 && average < 820)
+		average += 100;
+	
 	return average;
 }
