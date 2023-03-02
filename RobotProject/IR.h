@@ -14,9 +14,6 @@
 
 #define FLIP_DIRECTION 1
 
-#define outmost_smoothness 8 // lower values will make the robot turn slower in corners
-
-
 
 void initIRSensors() {
 	adc_init();
@@ -62,7 +59,7 @@ uint16_t getTrackDirection() {
 	// outmost
 	if(left_black > 700)
 		return 1000;
-	if(right_black < 380)
+	if(right_black < 360)
 		return 0;
 		
 	// inner
@@ -72,13 +69,13 @@ uint16_t getTrackDirection() {
 	// to be sure, I take borders again
 	if(average > 700)
 		return 1000;
-	else if(average < 380)
+	else if(average < 360)
 		return 0;
 	
-	// average range is 380 : 700
-	average -= 380;		// 0 :  320
-	average *= 3;		// 0 :  960
-	average += 20;		// 20:  980
+	// average range is 360 : 700
+	average -= 360;		// 0 :  340
+	average *= 2.9;		// 0 :  986
+	average += 7;		// 7 :  993
 	
 	// push middles towards the outside
 	/*
