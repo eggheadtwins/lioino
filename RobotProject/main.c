@@ -18,9 +18,11 @@ int main(void) {
 	initIRSensors();
 	ultrasonic_init();
 	servo_init();
+	sei();
 
     while (1) {
-		//set_angle(90);
+		test();
+		
 		
     }
 }
@@ -28,22 +30,37 @@ int main(void) {
 
 void test(void) {
 	uint16_t track_dir = getTrackDirection();
-	uint16_t scalar = 12; //min 10, because set_speed takes max 100
-	uint16_t leftMotorSpeed = (1000-track_dir) / scalar;
-	uint16_t rightMotorSpeed = (track_dir) / scalar;
+	uint16_t scalar = 10;
+	if(track_dir < 680 && track_dir > 320)
+		scalar /= 2;
+	uint16_t leftMotorSpeed = min((1000-track_dir) / scalar, 1000);
+	uint16_t rightMotorSpeed = min((track_dir) / scalar, 1000);
 	leftMotorSpeed = (int) leftMotorSpeed;
 	rightMotorSpeed = (int) rightMotorSpeed;
 	set_speed(leftMotorSpeed, rightMotorSpeed);
-	_delay_ms(5);
+	_delay_ms(1);
 }
 
-void min(uint16_t a, uint16_t b){
+int min(int a, int b){
 	return (a < b)? a : b;
 }
 
 
 ISR(USART_RX_vect){
-	command = UDR0;
+	usart_send_char(UDR0);
+	if(UDR0 == 'A'){
+		while(1){
+			test();
+			
+		}
+	}else if(UDR0 == 'B'){
+		while(1){
+			
+			
+		}
+		
+	}
+	
 	
 	
 }

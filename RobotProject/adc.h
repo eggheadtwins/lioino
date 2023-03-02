@@ -8,9 +8,6 @@
 #define PRESCALER 4
 #define AREF REFS0
 
-#define ADC_SIZE 10
-
-
 void set_prescaler(void) {
 	switch(PRESCALER){ // Set Prescaler.
 		case 2:
@@ -50,9 +47,10 @@ void adc_init() {
 
 void pin_to_mux(uint8_t pin) {
 	ADMUX &= ~_BV(MUX3) & ~_BV(MUX2) & ~_BV(MUX1) & ~_BV(MUX0); // Reset MUX.
+	
 	switch(pin){ // Sets MUX values based on pins.
 		case ADC0D:
-			ADMUX &= ~_BV(MUX3) & ~_BV(MUX2) & ~_BV(MUX1) & ~_BV(MUX0);
+			ADMUX &= ~(_BV(MUX3) | _BV(MUX2) | _BV(MUX1) | _BV(MUX0));
 			break;
 		case ADC1D:
 			ADMUX |= _BV(MUX0);
