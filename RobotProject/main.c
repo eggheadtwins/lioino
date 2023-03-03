@@ -23,7 +23,6 @@ int main(void) {
 	ultrasonic_init();
 	servo_init();
 	sei();
-
 		
 	while(1){
 		if(command == START){
