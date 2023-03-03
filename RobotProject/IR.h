@@ -22,6 +22,7 @@ void initIRSensors() {
 // the farther away from 500, the more outward we are
 
 uint16_t getTrackDirection() {
+	_delay_ms(100);
 	// the higher the blacker, 8bit value
 	uint16_t left_black   = read_adc(sensor_l);
 	uint16_t right_black  = read_adc(sensor_r);
