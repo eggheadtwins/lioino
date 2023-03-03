@@ -55,7 +55,7 @@ void test(void) {
 		if(middleDist < 0)
 			middleDist *= -1;
 		// range from [0 ~ 500]: 0 -> 7, 500 -> 12
-		int scalar = (middleDist / 100) + 7;
+		int scalar = (middleDist / 100) + 9;
 		
 		leftMotorSpeed  = (1000-track_dir) / scalar;
 		rightMotorSpeed = track_dir / scalar;

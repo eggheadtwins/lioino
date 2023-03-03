@@ -37,10 +37,14 @@ uint16_t getTrackDirection() {
 	uint16_t rightCalibration = right_black - ((left_black + center_black) / 2);
 	right_black -= rightCalibration;
 	
-	if(lapDetection && left_black < 300 && right_black < 300 && center_black < 300) {
+	uint16_t sum = left_black + center_black + right_black;
+	
+	if(lapDetection && sum < 320 * 3) {
 		return 1001; // lap detected
-	} else if(left_black > 690 && right_black > 690 && center_black > 690)
+	} else if(sum > 640 * 3) {
 		lapDetection = true;
+		return 1000;
+	}
 		
 	/*
 	uint8_t left[] = "\n\nLEFT: ";
@@ -70,8 +74,7 @@ uint16_t getTrackDirection() {
 		return 0;
 		
 	// inner
-	int average = (int)(left_black + center_black + right_black);
-	average/=3;
+	int average = ((int)sum)/3;
 	
 	// to be sure, I take borders again
 	if(average > 670)
