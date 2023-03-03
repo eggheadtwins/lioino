@@ -33,17 +33,15 @@ uint16_t getTrackDirection() {
 	uint16_t rightCalibration = right_black - ((left_black + center_black) / 2);
 	right_black -= rightCalibration;
 	
-	uint16_t sum = left_black + center_black + right_black;
+	uint16_t sum = left_black + center_black; // only two here, right one is added later
 	
-	if(lapDetection && sum < 320 * 3) {
-		usart_send_chars("Lap detected 2");
+	if(lapDetection && sum < 320 * 2) {
 		return 1001; // lap detected
-	} else if(sum > 640 * 3) {
+	} else if(sum > 660 * 2) {
 		lapDetection = true;
-		usart_send_chars("Lap detected 1");
 		return 1000;
 	}
-		
+			
 	/*
 	uint8_t left[] = "\n\nLEFT: ";
 	uint8_t right[] = "\nRIGHT: ";
@@ -72,6 +70,7 @@ uint16_t getTrackDirection() {
 		return 0;
 		
 	// inner
+	sum += right_black; // add the other one
 	int average = ((int)sum)/3;
 	
 	// to be sure, I take borders again
@@ -80,10 +79,9 @@ uint16_t getTrackDirection() {
 	else if(average < 360)
 		return 0;
 		
-	if(lapDetection) {// if we get values in between, we are over the start/finish line
+	if(lapDetection) // if we get values in between, we are over the start/finish line
 		lapDetection = false;
-		usart_send_chars("Lap detection finished");
-	}
+	
 	
 	// average range is 360 : 670
 	average -= 360;		// 0 :  310
