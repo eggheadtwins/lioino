@@ -1,5 +1,6 @@
 #include <avr/io.h>
 #include <avr/sfr_defs.h>
+#include <stdbool.h>
 #include "adc.h"
 
 #define sensor_l ADC5D 
@@ -12,16 +13,17 @@
 #define IR_threshold 600
 #define max_IR_val 1024
 
-#define FLIP_DIRECTION 1
+bool lapDetection;
 
 
 void initIRSensors() {
+	lapDetection = false;
 	adc_init();
 }
 
 // return a value under 1 ([0-500]) when we are on the left side of the track,
 // a value over 1 ([500-1000]) when we are on the right side of the track
-// the higher the absolute value, the more outward we are
+// the farther away from 500, the more outward we are
 
 uint16_t getTrackDirection() {
 	// the higher the blacker, 8bit value
@@ -34,6 +36,11 @@ uint16_t getTrackDirection() {
 	// right-sensor calibration
 	uint16_t rightCalibration = right_black - ((left_black + center_black) / 2);
 	right_black -= rightCalibration;
+	
+	if(lapDetection && left_black > 710 && right_black > 710 && center_black > 710) {
+		return 1001; // lap detected
+	} else if(left_black < 290 && right_black < 290 && center_black < 290)
+		lapDetection = true;
 		
 	/*
 	uint8_t left[] = "\n\nLEFT: ";
@@ -71,6 +78,9 @@ uint16_t getTrackDirection() {
 		return 1000;
 	else if(average < 360)
 		return 0;
+		
+	if(lapDetection) // if we get values in between, we are over the start/finish line
+		lapDetection = false;
 	
 	// average range is 360 : 670
 	average -= 360;		// 0 :  310
