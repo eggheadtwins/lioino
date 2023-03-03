@@ -43,7 +43,8 @@ void test(void) {
 	int track_dir = (int) getTrackDirection();
 	if(track_dir == 1001) {	// lap detection
 		set_speed(0,0);
-		_delay_ms(100);
+		_delay_ms(1000);
+		return;
 	}
 	
 	int leftMotorSpeed;

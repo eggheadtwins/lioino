@@ -10,11 +10,7 @@
 #define sensor_bl ADC1D
 #define sensor_br ADC2D
 
-#define IR_threshold 600
-#define max_IR_val 1024
-
-bool lapDetection;
-
+volatile bool lapDetection;
 
 void initIRSensors() {
 	lapDetection = false;
@@ -40,9 +36,11 @@ uint16_t getTrackDirection() {
 	uint16_t sum = left_black + center_black + right_black;
 	
 	if(lapDetection && sum < 320 * 3) {
+		usart_send_chars("Lap detected 2");
 		return 1001; // lap detected
 	} else if(sum > 640 * 3) {
 		lapDetection = true;
+		usart_send_chars("Lap detected 1");
 		return 1000;
 	}
 		
@@ -82,8 +80,10 @@ uint16_t getTrackDirection() {
 	else if(average < 360)
 		return 0;
 		
-	if(lapDetection) // if we get values in between, we are over the start/finish line
+	if(lapDetection) {// if we get values in between, we are over the start/finish line
 		lapDetection = false;
+		usart_send_chars("Lap detection finished");
+	}
 	
 	// average range is 360 : 670
 	average -= 360;		// 0 :  310
