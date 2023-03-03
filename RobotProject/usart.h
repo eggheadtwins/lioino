@@ -1,4 +1,3 @@
-
 #include <avr/io.h>
 #include <stdlib.h>
 #include <avr/sfr_defs.h>
@@ -9,11 +8,11 @@
 #define BAUD 9600
 #define MYUBRR F_CPU/16/BAUD-1
 
- 
+
 void usart_init(void){
 	UBRR0H = (MYUBRR >> 8); //eight least significant bits of BAUD.
 	UBRR0L = MYUBRR; // 4 significant bits of BAUD.
-	UCSR0B = _BV(TXEN0) | _BV(RXEN0) | _BV(RXCIE0); //enable transmit and receive, and On receive interrupt.
+	UCSR0B = _BV(TXEN0) | _BV(RXEN0); //| _BV(RXCIE0); //enable transmit and receive, and On receive interrupt.
 	UCSR0C |= _BV(UCSZ01) | _BV(UCSZ00);
 	UCSR0C &= ~_BV(UMSEL00) & ~_BV(UPM00) & ~_BV(USBS0);
 }
@@ -33,7 +32,7 @@ void usart_send_chars(uint8_t * data){
 }
 
 void usart_send_8bit(uint8_t data){
-	uint8_t string[4]; // Max 255, 4 Chars with '/0'.	
+	uint8_t string[4]; // Max 255, 4 Chars with '/0'.
 	itoa(data, string, 10); // Convert Int to String.
 	usart_send_chars(string);
 	free(string);
@@ -47,7 +46,7 @@ void usart_send_16bit(uint16_t data){
 	
 	usart_send_chars(string);
 
-	free(string);	
+	free(string);
 	
 	
 }

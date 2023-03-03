@@ -1,6 +1,5 @@
 #include <avr/io.h>
 #include <avr/sfr_defs.h>
-#include <stdbool.h>
 #include "adc.h"
 
 #define sensor_l ADC5D 
@@ -10,10 +9,7 @@
 #define sensor_bl ADC1D
 #define sensor_br ADC2D
 
-volatile bool lapDetection;
-
 void initIRSensors() {
-	lapDetection = false;
 	adc_init();
 }
 
@@ -22,7 +18,6 @@ void initIRSensors() {
 // the farther away from 500, the more outward we are
 
 uint16_t getTrackDirection() {
-	_delay_ms(100);
 	// the higher the blacker, 8bit value
 	uint16_t left_black   = read_adc(sensor_l);
 	uint16_t right_black  = read_adc(sensor_r);
@@ -33,17 +28,8 @@ uint16_t getTrackDirection() {
 	// right-sensor calibration
 	uint16_t rightCalibration = right_black - ((left_black + center_black) / 2);
 	right_black -= rightCalibration;
-	
-	uint16_t sum = left_black + center_black; // only two here, right one is added later
-	
-	if(lapDetection && sum < 320 * 2) {
-		return 1001; // lap detected
-	} else if(sum > 660 * 2) {
-		lapDetection = true;
-		return 1000;
-	}
 			
-	/*
+			/*
 	uint8_t left[] = "\n\nLEFT: ";
 	uint8_t right[] = "\nRIGHT: ";
 	uint8_t center[] = "\nCENTER: ";
@@ -71,18 +57,13 @@ uint16_t getTrackDirection() {
 		return 0;
 		
 	// inner
-	sum += right_black; // add the other one
-	int average = ((int)sum)/3;
+	int average = ((int)(left_black + right_black + center_black))/3;
 	
 	// to be sure, I take borders again
 	if(average > 670)
 		return 1000;
 	else if(average < 360)
-		return 0;
-		
-	if(lapDetection) // if we get values in between, we are over the start/finish line
-		lapDetection = false;
-	
+		return 0;	
 	
 	// average range is 360 : 670
 	average -= 360;		// 0 :  310
