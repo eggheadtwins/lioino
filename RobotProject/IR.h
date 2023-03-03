@@ -70,7 +70,7 @@ uint16_t getTrackDirection() {
 		return 0;
 		
 	// inner
-	uint16_t average = left_black + center_black + right_black;
+	int average = (int)(left_black + center_black + right_black);
 	average/=3;
 	
 	// to be sure, I take borders again
@@ -88,10 +88,10 @@ uint16_t getTrackDirection() {
 	average += 35;		// 35:  965
 	
 	// push middles towards the outside
-	if(average > 450)
-		average += 180;
-	else if(average < 550)
-		average -= 180;
+	float pushIt = (average-500);
+	pushIt = (pushIt * 1.32) + 500;
+	
+	average = (uint16_t) pushIt;	
 	
 	// clip borders
 	if(average < 0)
