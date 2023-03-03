@@ -37,9 +37,9 @@ uint16_t getTrackDirection() {
 	uint16_t rightCalibration = right_black - ((left_black + center_black) / 2);
 	right_black -= rightCalibration;
 	
-	if(lapDetection && left_black > 710 && right_black > 710 && center_black > 710) {
+	if(lapDetection && left_black < 290 && right_black < 290 && center_black < 290) {
 		return 1001; // lap detected
-	} else if(left_black < 290 && right_black < 290 && center_black < 290)
+	} else if(left_black > 710 && right_black > 710 && center_black > 710)
 		lapDetection = true;
 		
 	/*
