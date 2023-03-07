@@ -28,11 +28,16 @@ int main(void) {
 	lapDetectionWhite = 0;
 	lapDetectionBlack = 0;
 	
+	while(0){
+		set_angle();
+	}
+
 	while(1){
 		set_angle();
 		if(command == START){
 			set_speed(40, 40);
 			_delay_ms(200);
+			
 			while(1){
 				test();
 				
