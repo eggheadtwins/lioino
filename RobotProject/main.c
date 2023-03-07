@@ -36,7 +36,7 @@ int main(void) {
 	while(1){
 		if(command == START){
 			set_speed(100, 100);
-			_delay_ms(1000);
+			_delay_ms(200);
 			
 			while(1){
 				test();
@@ -81,7 +81,9 @@ void test(void) {
 		if(middleDist < 0)
 			middleDist *= -1;
 		// range from [0 ~ 500]: 0 -> 7, 500 -> 13
-		float scalar = (middleDist / 80.0) + 6;
+		float scalar = (middleDist / 100.0) + 7;
+		if(scalar <= 7.2)
+			scalar -= 0.8;
 		
 		leftMotorSpeed  = (int)(((float)(1000-track_dir)) / scalar);
 		rightMotorSpeed = (int)(((float)track_dir) / scalar);
