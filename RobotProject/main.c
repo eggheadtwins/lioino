@@ -12,6 +12,8 @@ volatile int lapDetectionWhite;
 volatile int lapDetectionBlack;
 volatile int laps;
 
+uint8_t lapdetected[] = "Lap detected!\n";
+
 #define START 'A'
 #define PENALTY 'B'
 #define STOP 'C'
@@ -30,10 +32,11 @@ int main(void) {
 	lapDetectionBlack = 0;
 	laps = 0;
 
+	usart_send_char('m');
 	while(1){
 		if(command == START){
 			set_speed(100, 100);
-			_delay_ms(500);
+			_delay_ms(1000);
 			
 			while(1){
 				test();
@@ -62,7 +65,7 @@ void test(void) {
 		// lap detected!
 		lapDetectionBlack = 0;
 		lapDetectionWhite = 0;
-		usart_send_chars("Lap detected");
+		usart_send_chars(lapdetected);
 		laps++;
 	} else if(track_dir < 580 && track_dir > 420) {
 		lapDetectionBlack = 0;
@@ -74,14 +77,15 @@ void test(void) {
 	
 	if(track_dir != 0 && track_dir != 1000) {
 		// the closer to 500, scalar moves closer to 6 -> higher speed
-		int middleDist = track_dir - 500;
+		float middleDist = (float)track_dir - 500;
 		if(middleDist < 0)
 			middleDist *= -1;
-		// range from [0 ~ 500]: 0 -> 6, 500 -> 11
-		int scalar = (middleDist / 100) + 6;
+		// range from [0 ~ 500]: 0 -> 7, 500 -> 13
+		float scalar = (middleDist / 80.0) + 6;
 		
-		leftMotorSpeed  = (1000-track_dir) / scalar;
-		rightMotorSpeed = track_dir / scalar;
+		leftMotorSpeed  = (int)(((float)(1000-track_dir)) / scalar);
+		rightMotorSpeed = (int)(((float)track_dir) / scalar);
+		
 	} else {
 		if(track_dir == 0) {
 			leftMotorSpeed = 99;
