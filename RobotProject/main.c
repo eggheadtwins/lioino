@@ -7,9 +7,9 @@
 #include <stdlib.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
-#include <stdbool.h>
 
-volatile bool lapDetection;
+volatile int lapDetectionWhite;
+volatile int lapDetectionBlack;
 
 #define START 'A'
 #define PENALTY 'B'
@@ -25,9 +25,11 @@ int main(void) {
 	initIRSensors();
 	ultrasonic_init();
 	servo_init();
-	lapDetection = false;
+	lapDetectionWhite = 0;
+	lapDetectionBlack = 0;
 	
 	while(1){
+		set_angle();
 		if(command == START){
 			set_speed(40, 40);
 			_delay_ms(200);
@@ -48,14 +50,20 @@ int main(void) {
 void test(void) {
 	int track_dir = (int) getTrackDirection();
 	
-	if(track_dir == 0) {
-		lapDetection = true;
-	} else if(lapDetection && track_dir == 1000)	{ // lap detected!
+	if(track_dir == 1000 && lapDetectionBlack == 0) {
+		lapDetectionBlack = 1;
+		lapDetectionWhite = 0;
+	} else if(track_dir == 0 && lapDetectionBlack == 1) {
+		lapDetectionWhite = 1;
+	} else if(track_dir == 1000 && lapDetectionWhite == 1) {
+		lapDetectionBlack = 2;
+	} else if(track_dir == 0 && lapDetectionBlack == 2) {
+		// lap detected!
+		lapDetectionBlack = 0;
+		lapDetectionWhite = 0;
 		set_speed(0,0);
-		_delay_ms(2000);
-		return;
-	} else if(lapDetection && track_dir < 650 && track_dir > 350)
-		lapDetection = false;
+		_delay_ms(500);
+	}
 	
 	int leftMotorSpeed;
 	int rightMotorSpeed;

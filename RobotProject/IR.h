@@ -45,8 +45,7 @@ uint16_t getTrackDirection() {
 	usart_send_chars(backleft);
 	usart_send_16bit(back_left_black);
 	usart_send_chars(backright);
-	usart_send_16bit(back_right_black);
-	*/
+	usart_send_16bit(back_right_black);*/
 	
 	// border checking??
 
