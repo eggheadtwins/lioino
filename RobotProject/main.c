@@ -10,6 +10,7 @@
 
 volatile int lapDetectionWhite;
 volatile int lapDetectionBlack;
+volatile int laps;
 
 #define START 'A'
 #define PENALTY 'B'
@@ -27,6 +28,7 @@ int main(void) {
 	servo_init();
 	lapDetectionWhite = 0;
 	lapDetectionBlack = 0;
+	laps = 0;
 	
 	while(0){
 		set_angle();
@@ -66,6 +68,7 @@ void test(void) {
 		// lap detected!
 		lapDetectionBlack = 0;
 		lapDetectionWhite = 0;
+		laps++;
 		set_speed(0,0);
 		_delay_ms(500);
 	}
@@ -79,7 +82,7 @@ void test(void) {
 		if(middleDist < 0)
 			middleDist *= -1;
 		// range from [0 ~ 500]: 0 -> 7, 500 -> 12
-		int scalar = (middleDist / 100) + 9;
+		int scalar = (middleDist / 100) + 7;
 		
 		leftMotorSpeed  = (1000-track_dir) / scalar;
 		rightMotorSpeed = track_dir / scalar;
