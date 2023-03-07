@@ -37,7 +37,7 @@ int main(void) {
 	while(1){
 		if(command == START){
 			set_speed(100, 100);
-			_delay_ms(600);
+			_delay_ms(500);
 			
 			while(1){
 				test();
@@ -66,9 +66,11 @@ void test(void) {
 		// lap detected!
 		lapDetectionBlack = 0;
 		lapDetectionWhite = 0;
+		usart_send_chars("Lap detected");
 		laps++;
-		set_speed(0,0);
-		_delay_ms(500);
+	} else if(track_dir < 580 && track_dir > 420) {
+		lapDetectionBlack = 0;
+		lapDetectionWhite = 0;
 	}
 	
 	int leftMotorSpeed;
