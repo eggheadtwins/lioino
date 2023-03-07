@@ -28,8 +28,18 @@ int main(void) {
 	lapDetection = false;
 	
 	while(1){
-		test();
-		
+		if(command == START){
+			set_speed(40, 40);
+			_delay_ms(200);
+			while(1){
+				test();
+				
+				if(command == STOP){
+					set_speed(0, 0);
+					break;
+				}
+			}
+		}
 	}
 	
 }
