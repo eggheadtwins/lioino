@@ -106,26 +106,26 @@ void followTrack(void) {
 	}
 	//free(&track_dir);
 	
-	int breakMultiplier = 1;
 	if(pulse_width > 80 && pulse_width < 450) {
 		// brake because obstacle is close
 		// 450 -> 1
 		//  80 -> 100
 		
-		float temp = -1 * ((float) pulse_width);
-		temp += 450;	// 450 -> 0, 80 -> 380
-		temp /= 3.8;	// 450 -> 0, 80 -> 100
-		temp += 1;		// 450 -> 1, 80 -> 101
+		float breakMultiplier = -1 * ((float) pulse_width);
+		breakMultiplier += 450;	// 450 -> 0, 80 -> 380
+		breakMultiplier /= 3.8;	// 450 -> 0, 80 -> 100
+		breakMultiplier += 1;	// 450 -> 1, 80 -> 101
 		
-		breakMultiplier = (int) temp;
-		
-		//free(&temp);
+		if(breakMultiplier < 90) {
+			leftMotorSpeed /= (int) breakMultiplier;
+			rightMotorSpeed /= (int) breakMultiplier;
+		} else {
+			leftMotorSpeed = 0;
+			rightMotorSpeed = 0;
+		}
 	}
 	
-	set_speed(leftMotorSpeed / breakMultiplier, rightMotorSpeed / breakMultiplier);
-	
-	//free(&leftMotorSpeed);
-	//free(&rightMotorSpeed);
+	set_speed(leftMotorSpeed, rightMotorSpeed);
 }
 
 ISR(USART_RX_vect){
