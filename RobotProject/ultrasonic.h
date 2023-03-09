@@ -3,15 +3,15 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
-#define TRIGGER_DDRx DDRD
-#define TRIGGER_PORTx PORTD
-#define TRIGGER_PIN PIND7
+#define TRIGGER_DDRx DDRB
+#define TRIGGER_PORTx PORTB
+#define TRIGGER_PIN PINB4
 #define TRIGGER_FREQUENCY 15 // Manual trigger delay between Trigger HIGH and LOW. 
 
 #define ECHO_DDRx DDRB
 #define ECHO_PORTx PORTB
 #define ECHO_INTx PCINT0
-#define ECHO_PIN PINB0
+#define ECHO_PIN PINB5
 #define ECHO_INTERRUPT_REGISTER PCIE0
 
 #if ECHO_INTERRUPT_REGISTER == PCIE0
@@ -98,6 +98,12 @@ ISR(ECHO_INTx_VECTOR){
 	// ECHO pin goes from HIGH to LOW, when signal received. 
 	if (is_triggered == 1){
 		pulse_width = TCNT1;
+		
+//		if(pulse_width >= PULSE_WIDTH_MAX){
+//			pulse_width = 1;
+//		}else if(pulse_width <= PULSE_WIDTH_MIN){
+//			pulse_width = -1;
+//		}
 		
 		TCCR1B = is_triggered = TCNT1 = 0; // Stop timer, reset ticks.
 

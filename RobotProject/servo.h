@@ -32,10 +32,14 @@ void servo_init(void){
 
 
 void set_angle(int angle){
-	SERVO_OCnx = SERVO_MAX;
-	_delay_ms(2000);
-	SERVO_OCnx = SERVO_MIN;
-	_delay_ms(2000);
+	//			   (SERVO_MAX - SERVO_MIN)
+	// SERVO_MIN + ----------------------- x angle
+	//                        180
+	
+	int pulse = (int) (((SERVO_MAX - SERVO_MIN)/180) * angle);
+	pulse = SERVO_MIN + pulse;
+	SERVO_OCnx = pulse;
+	free(pulse);
 	
 	
 }
