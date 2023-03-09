@@ -81,7 +81,7 @@ uint16_t getTrackDirection() {
 	
 	average = (uint16_t) pushIt;	
 	
-	free(&pushIt);
+	//free(&pushIt);
 	
 	// clip borders
 	if(average < 0)
@@ -89,11 +89,11 @@ uint16_t getTrackDirection() {
 	else if(average > 1000)
 		average = 1000;
 		
-	free(&back_left_black);
+	/*free(&back_left_black);
 	free(&back_right_black);
 	free(&left_black);
 	free(&center_black);
-	free(&right_black);
+	free(&right_black);*/
 	
 	return average;
 }

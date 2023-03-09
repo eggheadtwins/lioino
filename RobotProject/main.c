@@ -26,7 +26,7 @@ int main(void) {
 	usart_init();
 	initIRSensors();
 	ultrasonic_init();
-	servo_init();
+	//servo_init();
 	lapDetectionWhite = 0;
 	lapDetectionBlack = 0;
 	laps = 0;
@@ -88,11 +88,11 @@ void followTrack(void) {
 		float scalar = (middleDist / 100.0) + 7;
 		if(scalar <= 7.2)
 			scalar -= 0.8;
-		free(&middleDist);
+		//free(&middleDist);
 		
 		leftMotorSpeed  = (int) (( (float) (1000-track_dir)	) / scalar);
 		rightMotorSpeed = (int) (( (float)  track_dir		) / scalar);
-		free(&scalar);
+		//free(&scalar);
 	} else {
 		if(track_dir == 0) {
 			leftMotorSpeed = 99;
@@ -102,7 +102,7 @@ void followTrack(void) {
 			rightMotorSpeed = 99;
 		}
 	}
-	free(&track_dir);
+	//free(&track_dir);
 	
 	int breakMultiplier = 1;
 	if(pulse_width > 80 && pulse_width < 450) {
@@ -117,13 +117,13 @@ void followTrack(void) {
 		
 		breakMultiplier = (int) temp;
 		
-		free(&temp);
+		//free(&temp);
 	}
 	
 	set_speed(leftMotorSpeed / breakMultiplier, rightMotorSpeed / breakMultiplier);
 	
-	free(&leftMotorSpeed);
-	free(&rightMotorSpeed);
+	//free(&leftMotorSpeed);
+	//free(&rightMotorSpeed);
 }
 
 ISR(USART_RX_vect){
