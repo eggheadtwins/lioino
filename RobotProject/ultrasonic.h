@@ -99,6 +99,12 @@ ISR(ECHO_INTx_VECTOR){
 	if (is_triggered == 1){
 		pulse_width = TCNT1;
 		
+//		if(pulse_width >= PULSE_WIDTH_MAX){
+//			pulse_width = 1;
+//		}else if(pulse_width <= PULSE_WIDTH_MIN){
+//			pulse_width = -1;
+//		}
+		
 		TCCR1B = is_triggered = TCNT1 = 0; // Stop timer, reset ticks.
 
 	// The ECHO pin is set HIGH when triggered. So, the timer starts here.
