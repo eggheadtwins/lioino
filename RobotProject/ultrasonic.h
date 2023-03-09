@@ -3,15 +3,15 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
-#define TRIGGER_DDRx DDRD
-#define TRIGGER_PORTx PORTD
-#define TRIGGER_PIN PIND7
+#define TRIGGER_DDRx DDRB
+#define TRIGGER_PORTx PORTB
+#define TRIGGER_PIN PINB4
 #define TRIGGER_FREQUENCY 15 // Manual trigger delay between Trigger HIGH and LOW. 
 
 #define ECHO_DDRx DDRB
 #define ECHO_PORTx PORTB
 #define ECHO_INTx PCINT0
-#define ECHO_PIN PINB0
+#define ECHO_PIN PINB5
 #define ECHO_INTERRUPT_REGISTER PCIE0
 
 #if ECHO_INTERRUPT_REGISTER == PCIE0
