@@ -45,6 +45,7 @@
 
 volatile uint16_t pulse_width = 0; // Stores the time taken to reach the receiver. 
 volatile uint8_t is_triggered = 0; // If the transmitter is set HIGH. 
+volatile uint8_t i = 0;
 
 void ultrasonic_init(){
 	// Set Trigger pin as OUTPUT, and ECHO pin as INPUT.
@@ -59,6 +60,18 @@ void ultrasonic_init(){
 	
 	// Enable global interrupts.
 	sei();
+	
+    // Set CTC Mode.
+    TCCR2B |= _BV(WGM12);
+
+    // Enable CTC interrupt.
+    TIMSK2 |= _BV(OCIE2A);
+
+    // Set TOP value.
+    OCR2A = 255;
+
+    // Set MAX (1024) Prescaler.
+    TCCR2B |= _BV(CS22) | _BV(CS21) | _BV(CS20);
 	
 }
 
@@ -75,10 +88,9 @@ void trigger(void){
 ISR(ECHO_INTx_VECTOR){
 	// ECHO pin goes from HIGH to LOW, when signal received. 
 	if (is_triggered == 1){
-		TCCR1B = is_triggered = TCNT1 = 0; // Stop timer, reset ticks.
 		pulse_width = TCNT1;
+		TCCR1B = is_triggered = TCNT1 = 0; // Stop timer, reset ticks.
 
-		
 	// The ECHO pin is set HIGH when triggered. So, the timer starts here.
 	} else if (is_triggered == 0){
 		is_triggered = 1;
@@ -86,4 +98,17 @@ ISR(ECHO_INTx_VECTOR){
 	}
 	
 	
+}
+
+ISR(TIMER2_COMPA_vect){
+	i = (i > 1)? 0 : i + 1;
+
+	if(i == 0){
+		TRIGGER_PORTx |= _BV(TRIGGER_PIN);
+
+	}else if(i == 1){
+		TRIGGER_PORTx &= ~_BV(TRIGGER_PIN);
+
+	}
+
 }
