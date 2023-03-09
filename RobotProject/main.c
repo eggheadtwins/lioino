@@ -32,6 +32,8 @@ int main(void) {
 	laps = 0;
 
 	while(1){
+		usart_send_16bit(pulse_width);
+		usart_send_char('\n');
 		if(command == START){
 			// wheelie!!!
 			/*
