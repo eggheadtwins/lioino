@@ -43,6 +43,8 @@
 #	define PRESCALER_BITS (_BV(CS12) | _BV(CS10))
 #endif
 
+#define TIMER2_OVERFLOW 1
+
 volatile uint16_t pulse_width = 0; // Stores the time taken to reach the receiver. 
 volatile uint8_t is_triggered = 0; // If the transmitter is set HIGH. 
 volatile uint8_t i = 0;
@@ -101,12 +103,12 @@ ISR(ECHO_INTx_VECTOR){
 }
 
 ISR(TIMER2_COMPA_vect){
-	i = (i > 1)? 0 : i + 1;
+	i = (i > TIMER2_OVERFLOW)? 0 : i + 1;
 
 	if(i == 0){
 		TRIGGER_PORTx |= _BV(TRIGGER_PIN);
 
-	}else if(i == 1){
+	}else if(i == TIMER2_OVERFLOW){
 		TRIGGER_PORTx &= ~_BV(TRIGGER_PIN);
 
 	}
