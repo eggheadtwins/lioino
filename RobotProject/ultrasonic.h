@@ -6,7 +6,7 @@
 #define TRIGGER_DDRx DDRD
 #define TRIGGER_PORTx PORTD
 #define TRIGGER_PIN PIND7
-#define TRIGGER_FREQUENCY 15
+#define TRIGGER_FREQUENCY 15 // Manual trigger delay between Trigger HIGH and LOW. 
 
 #define ECHO_DDRx DDRB
 #define ECHO_PORTx PORTB
@@ -43,9 +43,12 @@
 #	define PRESCALER_BITS (_BV(CS12) | _BV(CS10))
 #endif
 
-#define TIMER2_OVERFLOW 1
+#define TIMER2_OVERFLOW 10
 
-volatile uint16_t pulse_width = 0; // Stores the time taken to reach the receiver. 
+#define PULSE_WIDTH_MAX
+#define PULSE_WIDTH_MIN
+
+volatile int16_t pulse_width = 0; // Stores the time taken to reach the receiver. 
 volatile uint8_t is_triggered = 0; // If the transmitter is set HIGH. 
 volatile uint8_t i = 0;
 
@@ -63,17 +66,21 @@ void ultrasonic_init(){
 	// Enable global interrupts.
 	sei();
 	
-    // Set CTC Mode.
-    TCCR2B |= _BV(WGM12);
+	// Can be manually or automatically triggered. 
+	if(TIMER2_OVERFLOW != 0){
+		// Set CTC Mode.
+		TCCR2B |= _BV(WGM12);
 
-    // Enable CTC interrupt.
-    TIMSK2 |= _BV(OCIE2A);
+		// Enable CTC interrupt.
+		TIMSK2 |= _BV(OCIE2A);
 
-    // Set TOP value.
-    OCR2A = 255;
+		// Set TOP value.
+		OCR2A = 255;
 
-    // Set MAX (1024) Prescaler.
-    TCCR2B |= _BV(CS22) | _BV(CS21) | _BV(CS20);
+		// Set MAX (1024) Prescaler.
+		TCCR2B |= _BV(CS22) | _BV(CS21) | _BV(CS20);		
+	}
+
 	
 }
 
@@ -91,6 +98,7 @@ ISR(ECHO_INTx_VECTOR){
 	// ECHO pin goes from HIGH to LOW, when signal received. 
 	if (is_triggered == 1){
 		pulse_width = TCNT1;
+		
 		TCCR1B = is_triggered = TCNT1 = 0; // Stop timer, reset ticks.
 
 	// The ECHO pin is set HIGH when triggered. So, the timer starts here.
