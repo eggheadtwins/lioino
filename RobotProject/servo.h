@@ -15,6 +15,8 @@
 #endif
 
 #define TOP 20000
+#define SERVO_MIN 950
+#define SERVO_MAX 4700
 
 #define PRESCALER (_BV(CS11));
 
@@ -22,21 +24,18 @@ void servo_init(void){
 	// Set Servo pin as OUTPUT.
 	SERVO_DDRx |= _BV(SERVO_PIN);
 	
-	// Timer 1 - PWM - Mode 14
+	// Timer 1 - PWM - Mode 14 - PRESCALER 8 - 50 Hz
 	TCCR1A |= _BV(WGM11) | _BV(COM1A1);
-	TCCR1B |= _BV(WGM13) | _BV(WGM12);
-	TCCR1B |= PRESCALER;
+	TCCR1B |= _BV(WGM13) | _BV(WGM12) | _BV(CS11);
 	ICR1 = TOP;
 }
 
 
-void set_angle(){
-	for (int i = 0; i <= TOP; i++)
-	{
-		SERVO_OCnx = i;
-		_delay_ms(50);
-
-	}
+void set_angle(int angle){
+	SERVO_OCnx = SERVO_MAX;
+	_delay_ms(2000);
+	SERVO_OCnx = SERVO_MIN;
+	_delay_ms(2000);
 	
 	
 }
