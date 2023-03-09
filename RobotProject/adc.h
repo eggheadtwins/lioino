@@ -40,6 +40,9 @@ void set_prescaler(void) {
 void adc_init() {
 	ADCSRA = _BV(ADEN); // Enable ADC
 	ADMUX = _BV(AREF); // VREF to AVCC (+5v)
+	
+	// Disable digital input buffer. Not necessary as it an analog signal. Just to save power.
+	DIDR0 |= _BV(ADC0D) | _BV(ADC1D) | _BV(ADC3D) | _BV(ADC4D) | _BV(ADC5D);
 	set_prescaler(); 
 }
 
@@ -70,9 +73,6 @@ void pin_to_mux(uint8_t pin) {
 		default:
 			break;
 	}
-	
-	// Disable digital input buffer. Not necessary as it an analog signal. Just to save power.
-	DIDR0 = _BV(pin);
 }
 
 
