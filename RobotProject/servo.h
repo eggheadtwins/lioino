@@ -36,9 +36,9 @@ void set_angle(int angle){
 	// SERVO_MIN + ----------------------- x angle
 	//                        180
 	
-	int pulse_width = (int) (((SERVO_MAX - SERVO_MIN)/180) * angle);
-	pulse_width = SERVO_MIN + pulse_width;
-	SERVO_OCnx = pulse_width;
+	int pulse = (int) (((SERVO_MAX - SERVO_MIN)/180) * angle);
+	pulse = SERVO_MIN + pulse;
+	SERVO_OCnx = pulse;
 	
 	
 }
