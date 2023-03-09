@@ -19,17 +19,17 @@ void initIRSensors() {
 
 uint16_t getTrackDirection() {
 	// the higher the blacker, 8bit value
-	uint16_t left_black   = read_adc(sensor_l);
-	uint16_t right_black  = read_adc(sensor_r);
-	uint16_t center_black = read_adc(sensor_c);
-	uint16_t back_right_black = read_adc(sensor_br);
-	uint16_t back_left_black = read_adc(sensor_bl);
+	uint16_t left_black			= read_adc(sensor_l );
+	uint16_t right_black		= read_adc(sensor_r );
+	uint16_t center_black		= read_adc(sensor_c );
+	uint16_t back_right_black	= read_adc(sensor_br);
+	uint16_t back_left_black	= read_adc(sensor_bl);
 	
 	// right-sensor calibration
-	uint16_t rightCalibration = right_black - ((left_black + center_black) / 2);
-	right_black -= rightCalibration;
+	right_black -= right_black - ((left_black + center_black) / 2);			
 			
-			/*
+	// print IR-Values
+	/*
 	uint8_t left[] = "\n\nLEFT: ";
 	uint8_t right[] = "\nRIGHT: ";
 	uint8_t center[] = "\nCENTER: ";
@@ -46,10 +46,15 @@ uint16_t getTrackDirection() {
 	usart_send_chars(backleft);
 	usart_send_16bit(back_left_black);
 	usart_send_chars(backright);
-	usart_send_16bit(back_right_black);*/
+	usart_send_16bit(back_right_black);
 	
-	// border checking??
-
+	free(backleft);
+	free(backright);
+	free(left);
+	free(right);
+	free(center);
+	*/
+	
 	// outmost
 	if(left_black > 670)
 		return 1000;
@@ -71,16 +76,24 @@ uint16_t getTrackDirection() {
 	average += 35;		// 35:  965
 	
 	// push middles towards the outside
-	float pushIt = (average-500);
+	float pushIt = ((float)average) - 500;
 	pushIt = (pushIt * 1.32) + 500;
 	
 	average = (uint16_t) pushIt;	
+	
+	free(&pushIt);
 	
 	// clip borders
 	if(average < 0)
 		average = 0;
 	else if(average > 1000)
 		average = 1000;
+		
+	free(&back_left_black);
+	free(&back_right_black);
+	free(&left_black);
+	free(&center_black);
+	free(&right_black);
 	
 	return average;
 }

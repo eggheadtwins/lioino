@@ -13,14 +13,13 @@ volatile int lapDetectionBlack;
 volatile int laps;
 
 uint8_t lapdetected[] = "Lap detected!\n";
+volatile uint8_t command;
 
 #define START 'A'
 #define PENALTY 'B'
 #define STOP 'C'
 
-volatile int maxmotorspeed = 40;
-volatile uint8_t command;
-void test(void);
+void followTrack(void);
 
 int main(void) {
 	pwm_timer_init();
@@ -32,14 +31,16 @@ int main(void) {
 	lapDetectionBlack = 0;
 	laps = 0;
 
-	usart_send_char('m');
 	while(1){
 		if(command == START){
+			// wheelie!!!
+			/*
 			set_speed(100, 100);
 			_delay_ms(200);
+			*/
 			
 			while(1){
-				test();
+				followTrack();
 				
 				if(command == STOP){
 					set_speed(0, 0);
@@ -51,9 +52,11 @@ int main(void) {
 }
 
 
-void test(void) {
+void followTrack(void) {
 	int track_dir = (int) getTrackDirection();
 	
+	//lap detection
+	/*
 	if(track_dir == 1000 && lapDetectionBlack == 0) {
 		lapDetectionBlack = 1;
 		lapDetectionWhite = 0;
@@ -71,6 +74,7 @@ void test(void) {
 		lapDetectionBlack = 0;
 		lapDetectionWhite = 0;
 	}
+	*/
 	
 	int leftMotorSpeed;
 	int rightMotorSpeed;
@@ -84,26 +88,43 @@ void test(void) {
 		float scalar = (middleDist / 100.0) + 7;
 		if(scalar <= 7.2)
 			scalar -= 0.8;
+		free(&middleDist);
 		
-		leftMotorSpeed  = (int)(((float)(1000-track_dir)) / scalar);
-		rightMotorSpeed = (int)(((float)track_dir) / scalar);
-		
+		leftMotorSpeed  = (int) (( (float) (1000-track_dir)	) / scalar);
+		rightMotorSpeed = (int) (( (float)  track_dir		) / scalar);
+		free(&scalar);
 	} else {
 		if(track_dir == 0) {
 			leftMotorSpeed = 99;
-			rightMotorSpeed = 20;
+			rightMotorSpeed = 30;
 		} else {
 			leftMotorSpeed = 0;
 			rightMotorSpeed = 99;
 		}
 	}
-	set_speed(leftMotorSpeed, rightMotorSpeed);
+	free(&track_dir);
+	
+	int breakMultiplier = 1;
+	if(pulse_width > 80 && pulse_width < 450) {
+		// brake because obstacle is close
+		// 450 -> 1
+		//  80 -> 100
+		
+		float temp = -1 * ((float) pulse_width);
+		temp += 450;	// 450 -> 0, 80 -> 380
+		temp /= 3.8;	// 450 -> 0, 80 -> 100
+		temp += 1;		// 450 -> 1, 80 -> 101
+		
+		breakMultiplier = (int) temp;
+		
+		free(&temp);
+	}
+	
+	set_speed(leftMotorSpeed / breakMultiplier, rightMotorSpeed / breakMultiplier);
+	
+	free(&leftMotorSpeed);
+	free(&rightMotorSpeed);
 }
-
-int min(int a, int b){
-	return (a < b)? a : b;
-}
-
 
 ISR(USART_RX_vect){
 	command = UDR0;
