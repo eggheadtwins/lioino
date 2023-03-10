@@ -65,7 +65,7 @@ int main(void) {
 
 void followTrack(void) {
 	int track_dir = (int) getTrackDirection();
-	set_angle(track_dir / 5.555);
+	set_angle(track_dir / 10 + 40);
 	
 	//lap detection
 	/*
