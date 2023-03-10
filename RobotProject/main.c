@@ -30,7 +30,9 @@ int main(void) {
 	lapDetectionWhite = 0;
 	lapDetectionBlack = 0;
 	laps = 0;
+	set_angle(90);
 
+	/* servo testing
 	while(1){
 		set_angle(0);
 		_delay_ms(2000);
