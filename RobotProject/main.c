@@ -30,7 +30,6 @@ int main(void) {
 	lapDetectionWhite = 0;
 	lapDetectionBlack = 0;
 	laps = 0;
-	set_angle(90);
 
 	/* servo testing
 	while(1){
@@ -66,6 +65,7 @@ int main(void) {
 
 void followTrack(void) {
 	int track_dir = (int) getTrackDirection();
+	set_angle(track_dir / 5.555);
 	
 	//lap detection
 	/*
