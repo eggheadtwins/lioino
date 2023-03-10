@@ -29,26 +29,24 @@
 #endif
 
 
-#define PRESCALER 64
+#define TIMER1_PRESCALER 64
 
-#if PRESCALER == 1
-#	define PRESCALER_BITS (_BV(CS10))
-#elif PRESCALER == 8 
-#	define PRESCALER_BITS (_BV(CS11))
-#elif PRESCALER == 64 
-#	define PRESCALER_BITS (_BV(CS11) | _BV(CS10))
-#elif PRESCALER == 256 
-#	define PRESCALER_BITS (_BV(CS12))
-#elif PRESCALER == 1024
-#	define PRESCALER_BITS (_BV(CS12) | _BV(CS10))
+#if TIMER1_PRESCALER == 1
+#	define TIMER1_PRESCALER (_BV(CS10))
+#elif TIMER1_PRESCALER == 8 
+#	define TIMER1_PRESCALER (_BV(CS11))
+#elif TIMER1_PRESCALER == 64 
+#	define TIMER1_PRESCALER (_BV(CS11) | _BV(CS10))
+#elif TIMER1_PRESCALER == 256 
+#	define TIMER1_PRESCALER (_BV(CS12))
+#elif TIMER1_PRESCALER == 1024
+#	define TIMER1_PRESCALER (_BV(CS12) | _BV(CS10))
 #endif
 
 #define TIMER2_OVERFLOW 10
+#define TIMER2_PRESCALER _BV(CS22) | _BV(CS21) | _BV(CS20)
 
-#define PULSE_WIDTH_MAX
-#define PULSE_WIDTH_MIN
-
-volatile int16_t pulse_width = 0; // Stores the time taken to reach the receiver. 
+volatile uint16_t pulse_width = 0; // Stores the time taken to reach the receiver. 
 volatile uint8_t is_triggered = 0; // If the transmitter is set HIGH. 
 volatile uint8_t i = 0;
 
@@ -66,7 +64,8 @@ void ultrasonic_init(){
 	// Enable global interrupts.
 	sei();
 	
-	// Can be manually or automatically triggered. 
+	
+	// Automatic mode.
 	if(TIMER2_OVERFLOW != 0){
 		// Set CTC Mode.
 		TCCR2B |= _BV(WGM12);
@@ -78,9 +77,8 @@ void ultrasonic_init(){
 		OCR2A = 255;
 
 		// Set MAX (1024) Prescaler.
-		TCCR2B |= _BV(CS22) | _BV(CS21) | _BV(CS20);		
+		TCCR2B |= TIMER2_PRESCALER;		
 	}
-
 	
 }
 
@@ -97,20 +95,13 @@ void trigger(void){
 ISR(ECHO_INTx_VECTOR){
 	// ECHO pin goes from HIGH to LOW, when signal received. 
 	if (is_triggered == 1){
-		pulse_width = TCNT1;
-		
-//		if(pulse_width >= PULSE_WIDTH_MAX){
-//			pulse_width = 1;
-//		}else if(pulse_width <= PULSE_WIDTH_MIN){
-//			pulse_width = -1;
-//		}
-		
+		pulse_width = TCNT1;		
 		TCCR1B = is_triggered = TCNT1 = 0; // Stop timer, reset ticks.
 
 	// The ECHO pin is set HIGH when triggered. So, the timer starts here.
 	} else if (is_triggered == 0){
 		is_triggered = 1;
-		TCCR1B |= PRESCALER_BITS; // Start timer
+		TCCR1B |= TIMER1_PRESCALER; // Start timer
 	}
 	
 	

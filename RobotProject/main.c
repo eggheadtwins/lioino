@@ -22,16 +22,27 @@ volatile uint8_t command;
 void followTrack(void);
 
 int main(void) {
-	pwm_timer_init();
+	motors_init();
 	usart_init();
 	initIRSensors();
-	ultrasonic_init();
-	//servo_init();
+	//ultrasonic_init();
+	servo_init();
 	lapDetectionWhite = 0;
 	lapDetectionBlack = 0;
 	laps = 0;
 
 	while(1){
+		set_angle(0);
+		_delay_ms(2000);
+		set_angle(90);
+		_delay_ms(2000);
+		set_angle(180);
+		_delay_ms(2000);
+		//usart_send_16bit(pulse_width);
+		//usart_send_char('\n');
+	}
+
+	while(0){
 		if(command == START){
 			// wheelie!!!
 			/*
@@ -41,7 +52,6 @@ int main(void) {
 			
 			while(1){
 				followTrack();
-				
 				if(command == STOP){
 					set_speed(0, 0);
 					break;

@@ -18,8 +18,6 @@
 #define SERVO_MIN 950
 #define SERVO_MAX 4700
 
-#define PRESCALER (_BV(CS11));
-
 void servo_init(void){
 	// Set Servo pin as OUTPUT.
 	SERVO_DDRx |= _BV(SERVO_PIN);
@@ -40,8 +38,8 @@ void set_angle(int angle){
 	int e = SERVO_MIN + pulse;
 	SERVO_OCnx = e;
 	
-	
 }
+
 
 
 
