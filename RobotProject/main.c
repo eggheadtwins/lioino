@@ -79,7 +79,7 @@ int main(void) {
 
 void followTrack(void) {
 	int track_dir = (int) getTrackDirection();
-	set_angle(track_dir / 5.555);
+	set_angle(track_dir / 10 + 40);
 	
 	//lap detection
 	/*
@@ -137,10 +137,10 @@ void followTrack(void) {
 		
 		float breakMultiplier = -1 * ((float) pulse_width);
 		breakMultiplier += 450;	// 450 -> 0, 80 -> 380
-		breakMultiplier /= 3.8;	// 450 -> 0, 80 -> 100
-		breakMultiplier += 1;	// 450 -> 1, 80 -> 101
+		breakMultiplier /= 6;	// 450 -> 0, 80 -> 24
+		breakMultiplier += 1;	// 450 -> 1, 80 -> 25
 		
-		if(breakMultiplier < 90) {
+		if(breakMultiplier < 20) {
 			leftMotorSpeed /= (int) breakMultiplier;
 			rightMotorSpeed /= (int) breakMultiplier;
 		} else {
