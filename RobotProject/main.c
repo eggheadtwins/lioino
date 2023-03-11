@@ -25,11 +25,23 @@ int main(void) {
 	motors_init();
 	usart_init();
 	initIRSensors();
-	//ultrasonic_init();
+	ultrasonic_init();
 	servo_init();
 	lapDetectionWhite = 0;
 	lapDetectionBlack = 0;
 	laps = 0;
+
+	while(1){
+		set_angle(0);
+		_delay_ms(400);
+		set_angle(90);
+		_delay_ms(400);
+		set_angle(180);
+		_delay_ms(400);
+		usart_send_16bit(pulse_width);
+		usart_send_char('\n');
+		_delay_ms(100);
+	}
 
 	/* servo testing
 	while(1){
@@ -49,17 +61,19 @@ int main(void) {
 			/*
 			set_speed(100, 100);
 			_delay_ms(200);
-			*/
 			
 			while(1){
 				followTrack();
+				usart_send_16bit(pulse_width);
+				usart_send_char('\n');
+				_delay_ms(100);
 				if(command == STOP){
 					set_speed(0, 0);
 					break;
 				}
 			}
-		}
-	}
+			
+			*/
 }
 
 

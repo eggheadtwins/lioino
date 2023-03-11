@@ -28,26 +28,34 @@
 
 #endif
 
+// MAX Prescaler is necessary as the timer overflows even for very close obstacle.
+#define TIMER2_PRESCALER 1024  
 
-#define TIMER1_PRESCALER 64
+#if TIMER2_PRESCALER == 0
+#	define TIMER2_PRESCALER (_BV(CS20))
 
-#if TIMER1_PRESCALER == 1
-#	define TIMER1_PRESCALER (_BV(CS10))
-#elif TIMER1_PRESCALER == 8 
-#	define TIMER1_PRESCALER (_BV(CS11))
-#elif TIMER1_PRESCALER == 64 
-#	define TIMER1_PRESCALER (_BV(CS11) | _BV(CS10))
-#elif TIMER1_PRESCALER == 256 
-#	define TIMER1_PRESCALER (_BV(CS12))
-#elif TIMER1_PRESCALER == 1024
-#	define TIMER1_PRESCALER (_BV(CS12) | _BV(CS10))
+#elif TIMER2_PRESCALER == 8 
+#	define TIMER2_PRESCALER (_BV(CS21))
+
+#elif TIMER2_PRESCALER == 32
+#	define TIMER2_PRESCALER (_BV(CS21) | _BV(CS20))
+
+#elif TIMER2_PRESCALER == 64 
+#	define TIMER2_PRESCALER (_BV(CS22))
+
+#elif TIMER2_PRESCALER == 128
+#	define TIMER2_PRESCALER (_BV(CS22) | _BV(CS21))
+
+#elif TIMER2_PRESCALER == 256 
+#	define TIMER2_PRESCALER (_BV(CS22) | _BV(CS21))
+
+#elif TIMER2_PRESCALER == 1024
+#	define TIMER2_PRESCALER (_BV(CS22) | _BV(CS21) | _BV(CS20))
 #endif
 
 #define TIMER2_OVERFLOW 10
-#define TIMER2_PRESCALER _BV(CS22) | _BV(CS21) | _BV(CS20)
 
-volatile uint16_t pulse_width = 0; // Stores the time taken to reach the receiver. 
-volatile uint8_t is_triggered = 0; // If the transmitter is set HIGH. 
+volatile uint16_t pulse_width = 0; // Stores the time taken to reach the receiver.  
 volatile uint8_t i = 0;
 
 void ultrasonic_init(){
@@ -64,29 +72,28 @@ void ultrasonic_init(){
 	// Enable global interrupts.
 	sei();
 	
-	
 	// Automatic mode.
 	if(TIMER2_OVERFLOW != 0){
-		// Set CTC Mode.
-		TCCR2B |= _BV(WGM12);
-
-		// Enable CTC interrupt.
-		TIMSK2 |= _BV(OCIE2A);
-
 		// Set TOP value.
 		OCR2A = 255;
+		
+		// Enable CTC interrupt.
+		TIMSK2 |= _BV(OCIE2A);
+		
+		// Enable CTC Mode.
+		TCCR2B |= _BV(WGM12);
 
 		// Set MAX (1024) Prescaler.
-		TCCR2B |= TIMER2_PRESCALER;		
+		TCCR2B |= TIMER2_PRESCALER;
 	}
-	
+		
 }
 
 
 void trigger(void){
 	TRIGGER_PORTx |= _BV(TRIGGER_PIN);
 	_delay_ms(TRIGGER_FREQUENCY);
-	TRIGGER_PORTx &= ~_BV(TRIGGER_PIN);
+	TRIGGER_PORTx &= ~_BV(TRIGGER_PIN);	
 	
 }
 
@@ -94,25 +101,31 @@ void trigger(void){
 
 ISR(ECHO_INTx_VECTOR){
 	// ECHO pin goes from HIGH to LOW, when signal received. 
-	if (is_triggered == 1){
-		pulse_width = TCNT1;		
-		TCCR1B = is_triggered = TCNT1 = 0; // Stop timer, reset ticks.
-
+	if((ECHO_PORTx & _BV(ECHO_PIN)) == 0){
+		pulse_width = TCNT2;
+		
+		// Start auto-triggering again. 
+		TCCR2B |= _BV(WGM12);
+	
 	// The ECHO pin is set HIGH when triggered. So, the timer starts here.
-	} else if (is_triggered == 0){
-		is_triggered = 1;
-		TCCR1B |= TIMER1_PRESCALER; // Start timer
+	}else{
+		// Stop auto-triggering. 
+		TCCR2B &= ~_BV(WGM12);
 	}
+	
+	// Reset ticks.
+	TCNT2 = 0;
 	
 	
 }
 
+// Auto-triggering every ~ 0.19 ms. 
 ISR(TIMER2_COMPA_vect){
 	i = (i > TIMER2_OVERFLOW)? 0 : i + 1;
 
 	if(i == 0){
 		TRIGGER_PORTx |= _BV(TRIGGER_PIN);
-
+		
 	}else if(i == TIMER2_OVERFLOW){
 		TRIGGER_PORTx &= ~_BV(TRIGGER_PIN);
 
