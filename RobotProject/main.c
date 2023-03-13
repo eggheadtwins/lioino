@@ -123,35 +123,35 @@ void followTrack(void) {
 		leftMotorSpeed  = (int) (( (float) (1000-track_dir)	) / scalar);
 		rightMotorSpeed = (int) (( (float)  track_dir		) / scalar);
 		//free(&scalar);
+		
+		if(pulse_width > 5 && pulse_width < 60) {
+			// brake because obstacle is close
+			// 60 -> 1
+			// 5 -> 50 something
+			
+			int breakMultiplier = -1 * pulse_width;
+			breakMultiplier += 60;	// 60 -> 0, 5 -> 55
+			
+			leftMotorSpeed -= breakMultiplier;
+			rightMotorSpeed -= breakMultiplier;
+			
+			if(leftMotorSpeed < 0)
+			leftMotorSpeed = 0;
+			if(rightMotorSpeed < 0)
+			rightMotorSpeed = 0;
+		}
 	} else {
 		if(track_dir == 0) {
-			set_angle(170);
+			set_angle(10);
 			leftMotorSpeed = 99;
 			rightMotorSpeed = 30;
 		} else {
-			set_angle(10);
+			set_angle(170);
 			leftMotorSpeed = 0;
 			rightMotorSpeed = 99;
 		}
 	}
 	//free(&track_dir);
-	
-	if(pulse_width > 5 && pulse_width < 60) {
-		// brake because obstacle is close
-		// 60 -> 1
-		// 5 -> 50 something
-		
-		int breakMultiplier = -1 * pulse_width;
-		breakMultiplier += 60;	// 60 -> 0, 5 -> 55
-		
-		leftMotorSpeed -= breakMultiplier;
-		rightMotorSpeed -= breakMultiplier;
-		
-		if(leftMotorSpeed < 0)
-			leftMotorSpeed = 0;
-		if(rightMotorSpeed < 0)
-			rightMotorSpeed = 0;
-	}
 	
 	set_speed(leftMotorSpeed, rightMotorSpeed);
 }
