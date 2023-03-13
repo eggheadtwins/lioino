@@ -130,17 +130,16 @@ void followTrack(void) {
 	}
 	//free(&track_dir);
 	
-	if(pulse_width > 80 && pulse_width < 450) {
+	if(pulse_width > 13 && pulse_width < 60) {
 		// brake because obstacle is close
-		// 450 -> 1
-		//  80 -> 100
+		// 60 -> 1
+		// 13 -> 50 something
 		
 		float breakMultiplier = -1 * ((float) pulse_width);
-		breakMultiplier += 450;	// 450 -> 0, 80 -> 380
-		breakMultiplier /= 6;	// 450 -> 0, 80 -> 24
-		breakMultiplier += 1;	// 450 -> 1, 80 -> 25
+		breakMultiplier += 60;	// 60 -> 0, 13 -> 47
+		breakMultiplier += 1;	// 60 -> 1, 13 -> 48
 		
-		if(breakMultiplier < 20) {
+		if(breakMultiplier < 12) {
 			leftMotorSpeed /= (int) breakMultiplier;
 			rightMotorSpeed /= (int) breakMultiplier;
 		} else {
