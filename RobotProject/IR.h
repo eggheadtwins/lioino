@@ -40,20 +40,13 @@ uint16_t getTrackDirection() {
 	usart_send_16bit(center_black);
 	usart_send_chars(right);
 	usart_send_16bit(right_black);
-	
+	*/
 	uint8_t backleft[] = "\nBACK LEFT: ";
 	uint8_t backright[] = "\nBACK RIGHT: ";
 	usart_send_chars(backleft);
 	usart_send_16bit(back_left_black);
 	usart_send_chars(backright);
 	usart_send_16bit(back_right_black);
-	
-	free(backleft);
-	free(backright);
-	free(left);
-	free(right);
-	free(center);
-	*/
 	
 	// outmost
 	if(left_black > 670)
