@@ -86,6 +86,11 @@ int main(void) {
 void followTrack(void) {
 	int track_dir = (int) getTrackDirection();
 	
+	if(track_dir == 1001) {
+		set_speed(0, 0);
+		return;
+	}
+	
 	//lap detection
 	/*
 	if(track_dir == 1000 && lapDetectionBlack == 0) {

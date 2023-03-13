@@ -25,6 +25,9 @@ uint16_t getTrackDirection() {
 	uint16_t back_right_black	= read_adc(sensor_br);
 	uint16_t back_left_black	= read_adc(sensor_bl);
 	
+	if(back_left_black < 510 && back_right_black < 510) // out of track
+		return 1001;
+	
 	// right-sensor calibration
 	right_black -= right_black - ((left_black + center_black) / 2);			
 			
@@ -40,18 +43,19 @@ uint16_t getTrackDirection() {
 	usart_send_16bit(center_black);
 	usart_send_chars(right);
 	usart_send_16bit(right_black);
-	*/
+	
 	uint8_t backleft[] = "\nBACK LEFT: ";
 	uint8_t backright[] = "\nBACK RIGHT: ";
 	usart_send_chars(backleft);
 	usart_send_16bit(back_left_black);
 	usart_send_chars(backright);
 	usart_send_16bit(back_right_black);
+	*/
 	
 	// outmost
-	if(left_black > 670)
+	if(right_black > 670 || back_right_black < 500)
 		return 1000;
-	if(right_black < 360)
+	if(left_black < 360)
 		return 0;
 		
 	// inner
