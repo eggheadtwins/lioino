@@ -82,7 +82,6 @@ int main(void) {
 
 void followTrack(void) {
 	int track_dir = (int) getTrackDirection();
-	set_angle(track_dir / 10 + 40);
 	
 	//lap detection
 	/*
@@ -109,6 +108,8 @@ void followTrack(void) {
 	int rightMotorSpeed;
 	
 	if(track_dir != 0 && track_dir != 1000) {
+		set_angle(track_dir / 10 + 40);
+
 		// the closer to 500, scalar moves closer to 6 -> higher speed
 		float middleDist = (float)track_dir - 500;
 		if(middleDist < 0)
@@ -124,9 +125,11 @@ void followTrack(void) {
 		//free(&scalar);
 	} else {
 		if(track_dir == 0) {
+			set_angle(170);
 			leftMotorSpeed = 99;
 			rightMotorSpeed = 30;
 		} else {
+			set_angle(10);
 			leftMotorSpeed = 0;
 			rightMotorSpeed = 99;
 		}
