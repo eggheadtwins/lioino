@@ -31,6 +31,7 @@ int main(void) {
 	lapDetectionBlack = 0;
 	laps = 0;
 
+	/*
 	while(1){
 		//set_angle(0);
 		//_delay_ms(400);
@@ -42,6 +43,8 @@ int main(void) {
 		usart_send_char('\n');
 		_delay_ms(100);
 	}
+	
+	*/
 
 	/* servo testing
 	while(1){
@@ -54,26 +57,26 @@ int main(void) {
 		//usart_send_16bit(pulse_width);
 		//usart_send_char('\n');
 	}
+	
+	*/
 
-	while(0){
+	while(1){
 		if(command == START){
 			// wheelie!!!
-			/*
-			set_speed(100, 100);
-			_delay_ms(200);
+			//set_speed(100, 100);
+			//_delay_ms(200);
 			
 			while(1){
 				followTrack();
-				usart_send_16bit(pulse_width);
-				usart_send_char('\n');
-				_delay_ms(100);
+				
 				if(command == STOP){
 					set_speed(0, 0);
 					break;
 				}
 			}
+		}
+	}
 			
-			*/
 }
 
 
