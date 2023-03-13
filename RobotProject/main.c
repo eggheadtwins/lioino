@@ -5,12 +5,14 @@
 #include "ultrasonic.h"
 #include "servo.h"
 #include <stdlib.h>
+#include <stdbool.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
 volatile int lapDetectionWhite;
 volatile int lapDetectionBlack;
 volatile int laps;
+volatile bool obstacleDetected;
 
 uint8_t lapdetected[] = "Lap detected!\n";
 volatile uint8_t command;
@@ -30,6 +32,7 @@ int main(void) {
 	lapDetectionWhite = 0;
 	lapDetectionBlack = 0;
 	laps = 0;
+	obstacleDetected = false;
 
 	/*
 	while(1){
@@ -125,6 +128,7 @@ void followTrack(void) {
 		//free(&scalar);
 		
 		if(pulse_width > 5 && pulse_width < 60) {
+			obstacleDetected = true;
 			// brake because obstacle is close
 			// 60 -> 1
 			// 5 -> 50 something
@@ -136,17 +140,20 @@ void followTrack(void) {
 			rightMotorSpeed -= breakMultiplier;
 			
 			if(leftMotorSpeed < 0)
-			leftMotorSpeed = 0;
+				leftMotorSpeed = 0;
 			if(rightMotorSpeed < 0)
-			rightMotorSpeed = 0;
+				rightMotorSpeed = 0;
+		} else if(obstacleDetected) {
+			set_speed(80, 80);
+			obstacleDetected = false;
 		}
 	} else {
 		if(track_dir == 0) {
-			set_angle(10);
+			set_angle(90);
 			leftMotorSpeed = 99;
 			rightMotorSpeed = 30;
 		} else {
-			set_angle(170);
+			set_angle(90);
 			leftMotorSpeed = 0;
 			rightMotorSpeed = 99;
 		}
