@@ -32,12 +32,12 @@ int main(void) {
 	laps = 0;
 
 	while(1){
-		set_angle(0);
-		_delay_ms(400);
-		set_angle(90);
-		_delay_ms(400);
-		set_angle(180);
-		_delay_ms(400);
+		//set_angle(0);
+		//_delay_ms(400);
+		//set_angle(90);
+		//_delay_ms(400);
+		//set_angle(180);
+		//_delay_ms(400);
 		usart_send_16bit(pulse_width);
 		usart_send_char('\n');
 		_delay_ms(100);

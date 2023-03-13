@@ -17,6 +17,7 @@
 #define TOP 20000
 #define SERVO_MIN 950
 #define SERVO_MAX 4700
+#define RANGE (SERVO_MAX - SERVO_MIN)/180  
 
 void servo_init(void){
 	// Set Servo pin as OUTPUT.
@@ -33,14 +34,6 @@ void set_angle(int angle){
 	//			   (SERVO_MAX - SERVO_MIN)
 	// SERVO_MIN + ----------------------- x angle
 	//                        180
-	
-	int pulse = (int) (((SERVO_MAX - SERVO_MIN)/180) * angle);
-	SERVO_OCnx = SERVO_MIN + pulse;	
+	SERVO_OCnx = SERVO_MIN + ((int) RANGE * angle);
 }
-
-
-
-
-
-
 

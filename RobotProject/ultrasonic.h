@@ -119,7 +119,7 @@ ISR(ECHO_INTx_VECTOR){
 	
 }
 
-// Auto-triggering every ~ 0.19 ms. 
+// Auto-triggering every ~ 0.19s. 
 ISR(TIMER2_COMPA_vect){
 	i = (i > TIMER2_OVERFLOW)? 0 : i + 1;
 
