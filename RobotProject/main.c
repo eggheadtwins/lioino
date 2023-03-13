@@ -140,11 +140,14 @@ void followTrack(void) {
 		
 		int breakMultiplier = -1 * pulse_width;
 		breakMultiplier += 60;	// 60 -> 0, 5 -> 55
-		breakMultiplier /= 3;	// 60 -> 0, 5 -> 18
-		breakMultiplier += 1;	// 60 -> 1, 5 -> 19
 		
-		leftMotorSpeed /= breakMultiplier;
-		rightMotorSpeed /= breakMultiplier;
+		leftMotorSpeed -= breakMultiplier;
+		rightMotorSpeed -= breakMultiplier;
+		
+		if(leftMotorSpeed < 0)
+			leftMotorSpeed = 0;
+		if(rightMotorSpeed < 0)
+			rightMotorSpeed = 0;
 	}
 	
 	set_speed(leftMotorSpeed, rightMotorSpeed);
