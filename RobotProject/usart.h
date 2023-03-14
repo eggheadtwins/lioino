@@ -1,6 +1,7 @@
 #include <avr/io.h>
 #include <stdlib.h>
 #include <avr/sfr_defs.h>
+#include <avr/interrupt.h>
 
 #ifndef F_CPU
 #define F_CPU 16000000UL
@@ -8,6 +9,7 @@
 #define BAUD 9600
 #define MYUBRR F_CPU/16/BAUD-1
 
+volatile uint8_t command;
 
 void usart_init(void){
 	UBRR0H = (MYUBRR >> 8); //eight least significant bits of BAUD.
@@ -65,4 +67,9 @@ void usart_send_int(int data){
 uint8_t usart_recieve(){
 	while(!(UCSR0A & _BV(RXC0)));
 	return UDR0;
+}
+
+ISR(USART_RX_vect){
+	command = UDR0;
+	
 }

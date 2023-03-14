@@ -7,7 +7,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <util/delay.h>
-#include <avr/interrupt.h>
 
 volatile int lapDetectionWhite;
 volatile int lapDetectionBlack;
@@ -15,8 +14,6 @@ volatile int laps;
 volatile bool obstacleDetected;
 
 uint8_t lapdetected[] = "Lap detected!\n";
-volatile uint8_t command;
-
 #define START 'A'
 #define PENALTY 'B'
 #define STOP 'C'
@@ -34,40 +31,11 @@ int main(void) {
 	laps = 0;
 	obstacleDetected = false;
 
-	/*
-	while(1){
-		//set_angle(0);
-		//_delay_ms(400);
-		//set_angle(90);
-		//_delay_ms(400);
-		//set_angle(180);
-		//_delay_ms(400);
-		usart_send_16bit(pulse_width);
-		usart_send_char('\n');
-		_delay_ms(100);
-	}
-	
-	*/
-
-	/* servo testing
-	while(1){
-		set_angle(0);
-		_delay_ms(2000);
-		set_angle(90);
-		_delay_ms(2000);
-		set_angle(180);
-		_delay_ms(2000);
-		//usart_send_16bit(pulse_width);
-		//usart_send_char('\n');
-	}
-	
-	*/
-
 	while(1){
 		if(command == START){
 			// wheelie!!!
-			//set_speed(100, 100);
-			//_delay_ms(200);
+			set_speed(100, 100);
+			_delay_ms(200);
 			
 			while(1){
 				followTrack();
@@ -75,6 +43,10 @@ int main(void) {
 				if(command == STOP){
 					set_speed(0, 0);
 					break;
+					
+				}else if(command == PENALTY){
+					set_speed(0, 0);
+					_delay_ms(5000);
 				}
 			}
 		}
@@ -166,8 +138,4 @@ void followTrack(void) {
 	//free(&track_dir);
 	
 	set_speed(leftMotorSpeed, rightMotorSpeed);
-}
-
-ISR(USART_RX_vect){
-	command = UDR0;
 }

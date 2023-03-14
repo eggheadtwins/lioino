@@ -104,9 +104,13 @@ ISR(ECHO_INTx_VECTOR){
 	if((ECHO_PORTx & _BV(ECHO_PIN)) == 0){
 		pulse_width = TCNT2;
 		
+		if(pulse_width == 35){
+			pulse_width = 80;
+		}
+		
 		// Start auto-triggering again. 
 		TCCR2B |= _BV(WGM12);
-	
+			
 	// The ECHO pin is set HIGH when triggered. So, the timer starts here.
 	}else{
 		// Stop auto-triggering. 
