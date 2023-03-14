@@ -9,6 +9,8 @@
 #define sensor_bl ADC1D
 #define sensor_br ADC2D
 
+#define sensorValueTuning 100;
+
 void initIRSensors() {
 	adc_init();
 }
@@ -19,9 +21,9 @@ void initIRSensors() {
 
 uint16_t getTrackDirection() {
 	// the higher the blacker, 8bit value
-	uint16_t left_black			= read_adc(sensor_l );
-	uint16_t right_black		= read_adc(sensor_r );
-	uint16_t center_black		= read_adc(sensor_c );
+	uint16_t left_black			= read_adc(sensor_l) - sensorValueTuning;
+	uint16_t right_black		= read_adc(sensor_r) - sensorValueTuning;
+	uint16_t center_black		= read_adc(sensor_c) - sensorValueTuning;
 	/*uint16_t back_right_black	= read_adc(sensor_br);
 	uint16_t back_left_black	= read_adc(sensor_bl);
 	
@@ -53,7 +55,7 @@ uint16_t getTrackDirection() {
 	*/
 	
 	// outmost
-	if(right_black > 670 )//|| back_right_black < 500)
+	if(right_black > 670) //|| back_right_black < 500)
 		return 1000;
 	if(left_black < 360)
 		return 0;

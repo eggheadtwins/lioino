@@ -31,6 +31,9 @@ void servo_init(void){
 
 
 void set_angle(int angle){
+	angle += 15;
+	if(angle > 180)
+		angle = 180;
 	//			   (SERVO_MAX - SERVO_MIN)
 	// SERVO_MIN + ----------------------- x angle
 	//                        180
