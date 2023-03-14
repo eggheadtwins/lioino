@@ -104,8 +104,8 @@ ISR(ECHO_INTx_VECTOR){
 	if((ECHO_PORTx & _BV(ECHO_PIN)) == 0){
 		pulse_width = TCNT2;
 		
-		if(pulse_width == 34){
-			pulse_width = 73;
+		if(pulse_width == 35){
+			pulse_width = 80;
 		}
 		
 		// Start auto-triggering again. 
